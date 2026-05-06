@@ -93,7 +93,7 @@ El asegurado obtiene la respuesta pero no sabe qué hacer con ella — el journe
 
 | Oportunidad | Solución elegida | Estado |
 |-------------|-----------------|--------|
-| _Pendiente de ciclo I&V_ | | |
+| C1.1 — Respuesta ambigua/técnica, no genera confianza | Coverwise Conversational Response (Ideas 1+2+3: respuesta LLM en lenguaje natural + indicador de plan/certeza + siguiente paso sugerido) | `in_progress` — Ciclo I&V 01/2026 |
 
 ---
 
