@@ -23,5 +23,4 @@ contexto/extendido/libros/
 
 # Node
 node_modules/
-dist/
 .output/
