@@ -1,15 +1,15 @@
 ---
-title: Opportunity Solution Tree — [Nombre del Squad]
-author: [Autor]
-created: YYYY-MM-DD
-last_modified: YYYY-MM-DD
-last_modified_by: [Nombre]
+title: Opportunity Solution Tree — Coverage & Inquiries Squad
+author: Claude (Shape facilitador)
+created: 2026-05-06
+last_modified: 2026-05-06
+last_modified_by: Claude (Shape facilitador)
 version: 1.0
-modification_count: 0
+modification_count: 1
 status: active
 ---
 
-# Opportunity Solution Tree — [Nombre del Squad]
+# Opportunity Solution Tree — Coverage & Inquiries Squad
 
 > Framework visual que conecta el outcome deseado con oportunidades identificadas y soluciones candidatas (Teresa Torres).
 > Estrategia alineada a los OKRs y objetivos de producto del equipo.
@@ -22,38 +22,74 @@ status: active
 
 ### Business Outcome
 
-> _Describir el outcome de negocio que el squad está persiguiendo. Debe ser medible y acotado en el tiempo._
+> El squad persigue que los asegurados de NexHealth resuelvan sus consultas de cobertura sin intervención humana, reduciendo la carga operativa del call center y mejorando la experiencia digital.
 
-**Métrica norte:** [Métrica principal]
+**Métrica norte:** % de consultas de cobertura resueltas vía autoservicio digital
 
-**Baseline actual:** [Valor actual]
+**Baseline actual:** 12%
 
-**Target:** [Valor objetivo] para [Fecha]
+**Target:** 45% para Sep 2026
 
 ---
 
 ## Árbol de Oportunidades
 
-> _Organizar las oportunidades en ramas que representen agrupaciones temáticas o de journey del usuario._
-> _Cada rama contiene oportunidades a nivel L2 (agrupadores) y nodos hoja a nivel L3 (oportunidades concretas accionables)._
+> Las oportunidades se organizan en ramas que representan momentos del journey del asegurado en una consulta de cobertura.
+> Nivel L2: agrupadores temáticos. Nivel L3: oportunidades concretas accionables (nodos hoja).
 
-### Rama A — [Nombre de la rama]
+---
 
-**A1 — [Oportunidad agrupadora]**
-- A1.1 — [Nodo hoja]
-- A1.2 — [Nodo hoja]
+### Rama A — Encontrar el canal correcto
 
-### Rama B — [Nombre de la rama]
+El asegurado no llega a Coverwise porque no sabe que existe, no lo encuentra, o prefiere el canal que ya conoce (teléfono).
 
-**B1 — [Oportunidad agrupadora]**
-- B1.1 — [Nodo hoja]
-- B1.2 — [Nodo hoja]
+**A1 — Acceso y visibilidad de Coverwise**
+
+- A1.1 — El asegurado no encuentra dónde hacer la consulta dentro de la app
+- A1.2 — El asegurado no sabe que puede usar Coverwise para preguntas en lenguaje natural
+- A1.3 — El asegurado llama directamente al call center sin intentar la vía digital
+
+---
+
+### Rama B — Formular la consulta
+
+El asegurado llega a Coverwise pero no logra expresar su necesidad de forma que el sistema la entienda.
+
+**B1 — Expresión de la necesidad en lenguaje propio**
+
+- B1.1 — El asegurado usa el nombre coloquial del procedimiento y el sistema no lo reconoce
+- B1.2 — El asegurado no sabe el nombre del procedimiento y no sabe cómo describirlo
+- B1.3 — El asegurado hace una consulta compuesta ("¿me cubre la consulta y el examen?") y el sistema solo responde a la primera parte
+
+---
+
+### Rama C — Obtener una respuesta confiable `on_selected_path: true`
+
+El asegurado hace la consulta pero la respuesta que recibe no le genera suficiente confianza o claridad para actuar sin llamar.
+
+**C1 — Claridad y confianza en la respuesta** `on_selected_path: true`
+
+- **C1.1 — La respuesta es ambigua o contiene lenguaje técnico que el asegurado no entiende** `selected: true`
+- C1.2 — El asegurado no sabe si la respuesta aplica a su plan específico o es genérica
+- C1.3 — El asegurado recibe una respuesta pero no confía en ella porque "el sistema se equivoca a veces"
+
+---
+
+### Rama D — Actuar después de la respuesta
+
+El asegurado obtiene la respuesta pero no sabe qué hacer con ella — el journey no termina en la respuesta, sino en la acción.
+
+**D1 — Continuidad del journey post-respuesta**
+
+- D1.1 — El asegurado sabe que está cubierto pero no sabe cómo agendar ni dónde ir
+- D1.2 — El asegurado necesita mostrar la cobertura en la clínica pero no puede guardar ni compartir la respuesta
+- D1.3 — El asegurado sabe que NO está cubierto pero no sabe qué opciones tiene (bonos, FONASA, etc.)
 
 ---
 
 ## Soluciones candidatas
 
-> _Las soluciones se gestionan en `ideate-validate/`. Registrar aquí solo la solución elegida una vez cerrado el ciclo de Ideate & Validate._
+> Las soluciones se gestionan en `ideate-validate/`. Registrar aquí solo la solución elegida una vez cerrado el ciclo de Ideate & Validate.
 
 | Oportunidad | Solución elegida | Estado |
 |-------------|-----------------|--------|
@@ -65,4 +101,5 @@ status: active
 
 | Version | Date | Author | Description |
 |---------|------|--------|-------------|
-| 1.0 | YYYY-MM-DD | [Autor] | Creación inicial |
+| 1.1 | 2026-05-06 | Claude (Shape facilitador) | Cierre Shape ciclo-01. Nodo seleccionado: C1.1 (respuesta ambigua/técnica). Rama C y C1 marcados on_selected_path. Selección basada en KR3 at_risk como evidencia más urgente. |
+| 1.0 | 2026-05-06 | Claude (Shape facilitador) | Primer ciclo Shape. OST construido desde contexto corporativo seeded (sin entrevistas). Business Outcome anclado al OKR norte: % autoservicio 12% → 45% Sep 2026. Cuatro ramas de oportunidad: A (acceso), B (formulación), C (confianza en respuesta), D (acción post-respuesta). Bypassed: Experience Map (declarado en opportunity-assumptions.md). |
