@@ -29,8 +29,8 @@ Antes de entrar a la reu, marcar todos como completados:
 - [x] Repo GitHub creado — `guillebecerrao/cxpd-demo` (público, mono-repo: contexto SDPB + codebase en `dist/`)
 - [x] Cloudflare Pages project creado y conectado al repo GitHub (deploy automático en push/merge a `main`, output `dist/`)
 - [x] DNS de `coverwise.becerra-ojeda.cl` apuntado — custom domain inicializando en Cloudflare Pages
-- [ ] Seed populado con contexto mínimo del caso (opcional, alta recomendación)
-- [ ] Loom grabado (opcional pero recomendado)
+- [ ] Seed populado con contexto mínimo del caso — en progreso (agente paralelo)
+- [~] Loom grabado — descartado por tiempo
 
 ---
 

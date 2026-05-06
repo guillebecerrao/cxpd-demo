@@ -281,8 +281,8 @@ Todas las specs en `handoff-delivery/specs/activas/` con `status: approved`. `Re
 
 1. **Claude Code construye Coverwise** guiado por las specs aprobadas — en el mismo repo, desde el `SDPB-Context`, respetando el `release plan`.
 2. **Engineer revisa el código** generado, cierra el loop de calidad (`unit tests`, `edge cases` de las specs).
-3. **Deploy a Google Cloud Run**.
-4. **Apuntar dominio** `coverwise.becerra-ojeda.cl` al endpoint del `Cloud Run service`.
+3. **Deploy a Cloudflare Pages** (`npx wrangler pages deploy ./dist` o direct upload desde el dashboard).
+4. **Apuntar dominio** `coverwise.becerra-ojeda.cl` como custom domain en el Cloudflare Pages project — propagación instantánea si el dominio ya está en Cloudflare.
 5. **Demo a NexHealth**: walkthrough del `SDPB-Context repo` + producto vivo en la URL.
 
 ### Stack de Coverwise (para la demo)
@@ -290,11 +290,11 @@ Todas las specs en `handoff-delivery/specs/activas/` con `status: approved`. `Re
 | Capa | Tecnología |
 |------|-----------|
 | `Frontend` | React + Tailwind CSS (mobile-first) |
-| `Backend` | Python / FastAPI |
+| `Backend` | Cloudflare Workers (API routes, procedure resolver) |
 | `AI layer` | Claude API (`claude-sonnet-4-6`) — interpreta la query y estructura la respuesta |
 | `Coverage resolver` | Mock data de prestaciones NexHealth (JSON estático para demo) |
-| `Deploy` | Google Cloud Run |
-| `Domain` | `coverwise.becerra-ojeda.cl` → Cloud Run endpoint |
+| `Deploy` | Cloudflare Pages (frontend) + Workers (backend) |
+| `Domain` | `coverwise.becerra-ojeda.cl` → Cloudflare Pages custom domain |
 
 ### Artefactos producidos
 
