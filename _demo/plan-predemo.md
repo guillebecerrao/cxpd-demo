@@ -26,8 +26,9 @@ Antes de entrar a la reu, marcar todos como completados:
 - [x] Caso ficticio definido — NexHealth · Coverwise · `coverwise.becerra-ojeda.cl`
 - [x] Plan aplicado en `_demo/plan-5-dias-nexhealth.md`
 - [x] Slides generadas — `_demo/E2E-SDPB-Coverwise-TW.pptx` (10 slides EN)
-- [ ] GCP proyecto creado y billing conectado
-- [ ] DNS de `cxpd-demo.becerra-ojeda.cl` apuntado (o placeholder configurado)
+- [x] Repo GitHub creado — `guillebecerrao/cxpd-demo` (público, mono-repo: contexto SDPB + codebase en `dist/`)
+- [x] Cloudflare Pages project creado y conectado al repo GitHub (deploy automático en push/merge a `main`, output `dist/`)
+- [x] DNS de `coverwise.becerra-ojeda.cl` apuntado — custom domain inicializando en Cloudflare Pages
 - [ ] Seed populado con contexto mínimo del caso (opcional, alta recomendación)
 - [ ] Loom grabado (opcional pero recomendado)
 
@@ -109,39 +110,42 @@ Después de generado, revisar:
 
 ---
 
-### Bloque 5 — T+2:30 a T+3:00 | Setup GCP + Dominio
+### Bloque 5 — T+2:30 a T+3:00 | Setup Cloudflare + Dominio
 
-**Duración estimada**: 30 minutos  
+**Duración estimada**: 20 minutos (más simple que GCP)
 **Quién**: Guillermo ejecuta, Claude guía  
-**Output**: proyecto GCP creado + DNS apuntado
+**Output**: Cloudflare Pages project creado + `coverwise.becerra-ojeda.cl` apuntado
+
+**Stack de deploy**: Cloudflare Pages (frontend/estático) + Workers si se necesita lógica de backend en la demo. Sin billing, sin proyectos, sin APIs que habilitar.
 
 **Pasos**:
 
-**A. Crear proyecto en Google Cloud** (5 min):
-1. Ir a [console.cloud.google.com](https://console.cloud.google.com)
-2. New Project → nombre: `cxpd-demo` (o nombre del producto ficticio)
-3. Conectar billing account existente
-4. Habilitar APIs: Cloud Run · Cloud Build · Artifact Registry
+**A. Crear el Cloudflare Pages project** (5 min):
+1. Ir a [dash.cloudflare.com](https://dash.cloudflare.com) → Pages → Create a project
+2. Opción: conectar repo de GitHub, o usar **Direct Upload** (más rápido para demo)
+3. Nombre del project: `coverwise`
+4. Con Direct Upload: subir el `dist/` o el `index.html` del build — URL inmediata `coverwise.pages.dev`
 
-**B. Configurar dominio** (10 min + propagación):
-1. Ir al panel de DNS de `becerra-ojeda.cl` (provider actual)
-2. Crear registro A o CNAME: `cxpd-demo` → IP de Cloud Run (obtener tras primer deploy) o placeholder
-3. TTL: 300 segundos para propagación rápida
-4. Alternativa sin espera: usar la URL de Cloud Run directamente en la demo (`*.run.app`) y apuntar el dominio custom post-deploy
+**B. Configurar dominio custom** (10 min):
+1. En el project → Custom domains → Add custom domain
+2. Ingresar `coverwise.becerra-ojeda.cl`
+3. Cloudflare agrega el registro DNS automáticamente si `becerra-ojeda.cl` ya está en Cloudflare (verificar)
+4. Si el dominio no está en Cloudflare DNS: agregar CNAME `coverwise` → `coverwise.pages.dev` en el panel del registrador
+5. Propagación: instantánea si el dominio ya está en Cloudflare
 
-**C. Deploy de landing page placeholder** (15 min, opcional):
-Una página HTML estática mínima con el nombre del producto ficticio — confirma que el stack funciona antes de la demo.
+**C. Deploy de placeholder** (5 min, opcional):
+Un `index.html` mínimo con el nombre del producto — confirma que el dominio funciona antes de la demo.
 
 ```bash
-# Crear index.html mínimo y desplegar con Cloud Run
-gcloud run deploy cxpd-demo \
-  --source . \
-  --region us-central1 \
-  --allow-unauthenticated \
-  --project cxpd-demo
+# Con Wrangler CLI (si está instalado)
+npx wrangler pages deploy ./dist --project-name coverwise
+
+# O direct upload desde el dashboard — más rápido para demo
 ```
 
-**Fallback de demo**: si GCP o el DNS no están listos en tiempo, la demo no se cae — mostrar el repo + la URL como "lo que tendríamos al final del Día 5". La URL en producción es el cierre dramático, no el núcleo del argumento.
+**Workers (si aplica)**: si Coverwise necesita lógica de API (proxy a Claude API, procedure resolver), usar un Worker en el mismo proyecto. Sin servidor, sin contenedores, sin región a elegir.
+
+**Fallback de demo**: si el dominio custom no está listo, `coverwise.pages.dev` funciona igual de bien para la demo. La URL personalizada es el detalle, no el argumento.
 
 ---
 
@@ -193,12 +197,12 @@ Esto permite abrir Claude Code durante la demo y mostrar que el agente "ya sabe"
 | 2 | Definir caso ficticio | 30 min | Guillermo + Claude |
 | 3 | Plan aplicado al caso | 45 min | Claude |
 | 4 | Slides | 60 min | Claude + Guillermo |
-| 5 | GCP + Dominio | 30 min | Guillermo |
+| 5 | Cloudflare Pages + Dominio | 20 min | Guillermo |
 | 6 | Populate seed | 30 min | Claude |
 | 7 | Ensayo + Loom | 30 min | Guillermo |
 | **Total** | | **~4 horas** | |
 
-Si el tiempo es ajustado, el orden de sacrificio es: Bloque 6 (populate seed) → Bloque 7 Loom (solo ensayo) → Bloque 5 placeholder (usar URL `.run.app` en vez de dominio custom).
+Si el tiempo es ajustado, el orden de sacrificio es: Bloque 6 (populate seed) → Bloque 7 Loom (solo ensayo) → Bloque 5 dominio custom (usar `coverwise.pages.dev` directo en vez de `coverwise.becerra-ojeda.cl`).
 
 ---
 
