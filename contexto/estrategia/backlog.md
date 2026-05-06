@@ -1,15 +1,15 @@
 ---
-title: Product Backlog — [Nombre del Squad]
-author: [Autor]
-created: YYYY-MM-DD
-last_modified: YYYY-MM-DD
-last_modified_by: [Nombre]
-version: 1.0
-modification_count: 0
+title: Product Backlog — Coverage & Inquiries Squad
+author: Claude (Handoff facilitador)
+created: 2026-05-06
+last_modified: 2026-05-06
+last_modified_by: Claude (Handoff facilitador)
+version: 1.1
+modification_count: 1
 status: active
 ---
 
-# Product Backlog
+# Product Backlog — Coverage & Inquiries Squad
 
 > Product Backlog Items (PBIs) priorizados del squad.
 > Los PBIs activos provienen de specs en `handoff-delivery/specs/activas/`.
@@ -21,7 +21,7 @@ status: active
 
 | ID | Título | Épica | Status | Sprint | Trazabilidad OST |
 |----|--------|-------|--------|--------|-----------------|
-| | _Pendiente_ | | `in_dev` | | |
+| | _Pendiente — Sprint 01 inicia 02 Jun 2026_ | | | | |
 
 ---
 
@@ -29,7 +29,7 @@ status: active
 
 | ID | Título | Épica | Status | Trazabilidad OST |
 |----|--------|-------|--------|-----------------|
-| | _Pendiente_ | | `approved` | |
+| | _Pendiente — specs en revisión de tríada_ | | | |
 
 ---
 
@@ -45,7 +45,11 @@ status: active
 
 | ID | Título | Épica | Status | Trazabilidad OST |
 |----|--------|-------|--------|-----------------|
-| | _Pendiente_ | | `draft` | |
+| PBI-01 | Conversational Response Engine | Coverwise Conversational Response | `draft` | C1.1 |
+| PBI-02 | Plan & Confidence Indicator | Coverwise Conversational Response | `draft` | C1.1, C1.2 |
+| PBI-03 | Suggested Next Step CTA | Coverwise Conversational Response | `draft` | C1.1, D1.1 |
+| PBI-04 | Smart Escalation Fallback | Coverwise Conversational Response | `draft` | C1.1, C1.3 |
+| PBI-05 | A/B Test Infrastructure | Coverwise Conversational Response | `draft` | Experimento |
 
 ---
 
@@ -53,4 +57,5 @@ status: active
 
 | Version | Date | Author | Description |
 |---------|------|--------|-------------|
+| 1.1 | 2026-05-06 | Claude (Handoff facilitador) | 5 PBIs del ciclo 01 agregados en borrador. Spec: `prd-coverwise-conversational-response.md` |
 | 1.0 | YYYY-MM-DD | [Autor] | Creación inicial |
