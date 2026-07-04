@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opportunity Sizing & Prioritization — Shape Cycle 01</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary:        #1D4ED8;
+      --primary-dark:   #1E40AF;
+      --primary-light:  #DBEAFE;
+      --selected:       #7C3AED;
+      --selected-light: #EDE9FE;
+      --selected-dark:  #6D28D9;
+      --rank1:          #059669;
+      --rank1-light:    #D1FAE5;
+      --rank2:          #0891B2;
+      --rank2-light:    #CFFAFE;
+      --warn:           #D97706;
+      --warn-light:     #FEF3C7;
+      --neutral-900:    #0F172A;
+      --neutral-800:    #1E293B;
+      --neutral-700:    #334155;
+      --neutral-600:    #475569;
+      --neutral-500:    #64748B;
+      --neutral-400:    #94A3B8;
+      --neutral-300:    #CBD5E1;
+      --neutral-200:    #E2E8F0;
+      --neutral-100:    #F1F5F9;
+      --neutral-50:     #F8FAFC;
+      --white:          #FFFFFF;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--neutral-50);
+      color: var(--neutral-900);
+      min-height: 100vh;
+      padding: 2.5rem 2rem 4rem;
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      max-width: 1100px;
+      margin: 0 auto 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding-bottom: 1.25rem;
+      border-bottom: 2px solid var(--neutral-200);
+      gap: 1rem;
+    }
+
+    .header-left .kicker {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 0.35rem;
+    }
+
+    .header-left h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--neutral-900);
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .header-left .subtitle {
+      font-size: 0.85rem;
+      color: var(--neutral-500);
+      margin-top: 0.3rem;
+    }
+
+    .header-right {
+      text-align: right;
+      font-size: 0.72rem;
+      color: var(--neutral-400);
+      line-height: 1.6;
+      flex-shrink: 0;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .content {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ── SECTION ── */
+    .section {
+      margin-bottom: 3rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .section-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: var(--white);
+      font-size: 0.75rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .section-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--neutral-900);
+    }
+
+    /* ── CRITERIA CARDS ── */
+    .criteria-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .criterion-card {
+      background: var(--white);
+      border: 1.5px solid var(--neutral-200);
+      border-radius: 10px;
+      padding: 1rem;
+    }
+
+    .criterion-card .crit-name {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.3rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .criterion-card .crit-desc {
+      font-size: 0.78rem;
+      color: var(--neutral-600);
+      line-height: 1.4;
+      margin-bottom: 0.6rem;
+    }
+
+    .crit-levels {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .crit-level {
+      display: flex;
+      gap: 0.4rem;
+      align-items: flex-start;
+      font-size: 0.7rem;
+      color: var(--neutral-600);
+      line-height: 1.3;
+    }
+
+    .crit-level .score-dot {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      font-size: 0.6rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      background: var(--neutral-100);
+      color: var(--neutral-600);
+    }
+
+    .crit-level.score-3 .score-dot { background: var(--rank1-light); color: var(--rank1); }
+    .crit-level.score-2 .score-dot { background: var(--primary-light); color: var(--primary); }
+
+    .formula-note {
+      background: var(--neutral-100);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-size: 0.78rem;
+      color: var(--neutral-700);
+    }
+
+    .formula-note strong { color: var(--neutral-900); }
+
+    /* ── SCORING TABLE ── */
+    .scoring-block {
+      margin-bottom: 2rem;
+    }
+
+    .branch-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--neutral-700);
+      margin-bottom: 0.75rem;
+      padding: 0.3rem 0.75rem;
+      background: var(--neutral-100);
+      border-radius: 6px;
+    }
+
+    .scoring-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+    }
+
+    .scoring-table thead th {
+      background: var(--neutral-900);
+      color: var(--white);
+      padding: 0.6rem 0.8rem;
+      font-size: 0.67rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-align: left;
+    }
+
+    .scoring-table thead th:not(:first-child) { text-align: center; }
+
+    .scoring-table tbody tr {
+      border-bottom: 1px solid var(--neutral-200);
+    }
+
+    .scoring-table tbody tr:last-child { border-bottom: none; }
+
+    .scoring-table tbody tr:hover { background: var(--neutral-50); }
+
+    .scoring-table td {
+      padding: 0.65rem 0.8rem;
+      color: var(--neutral-700);
+      vertical-align: middle;
+    }
+
+    .scoring-table td:not(:first-child) { text-align: center; }
+
+    .scoring-table .node-id-cell {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--neutral-500);
+      white-space: nowrap;
+    }
+
+    .scoring-table .node-text-cell {
+      color: var(--neutral-800);
+      line-height: 1.3;
+    }
+
+    .score-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 28px;
+      height: 24px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0 6px;
+    }
+
+    .score-chip.score-3 { background: var(--rank1-light); color: var(--rank1); }
+    .score-chip.score-2 { background: var(--primary-light); color: var(--primary); }
+    .score-chip.score-1 { background: var(--neutral-100); color: var(--neutral-500); }
+
+    .total-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 32px;
+      height: 26px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0 8px;
+    }
+
+    .total-chip.high  { background: var(--rank1-light); color: var(--rank1); }
+    .total-chip.mid   { background: var(--primary-light); color: var(--primary); }
+    .total-chip.low   { background: var(--neutral-100); color: var(--neutral-600); }
+
+    .effort-chip {
+      font-size: 0.67rem;
+      font-weight: 600;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .effort-high   { background: var(--warn-light); color: var(--warn); }
+    .effort-medium { background: var(--primary-light); color: var(--primary); }
+    .effort-low    { background: var(--rank1-light); color: var(--rank1); }
+
+    /* Selected row */
+    .scoring-table tbody tr.selected-row {
+      background: var(--selected-light);
+    }
+
+    .scoring-table tbody tr.selected-row td { color: var(--neutral-900); }
+
+    /* Note rows */
+    .note-row td {
+      padding: 0.4rem 0.8rem 0.8rem;
+      font-size: 0.72rem;
+      color: var(--neutral-500);
+      font-style: italic;
+      line-height: 1.4;
+    }
+
+    /* ── RANKING TABLE ── */
+    .ranking-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+
+    .ranking-table thead th {
+      background: var(--neutral-800);
+      color: var(--white);
+      padding: 0.7rem 1rem;
+      font-size: 0.67rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-align: left;
+    }
+
+    .ranking-table tbody tr {
+      border-bottom: 1px solid var(--neutral-200);
+      background: var(--white);
+    }
+
+    .ranking-table tbody tr:last-child { border-bottom: none; }
+
+    .ranking-table td {
+      padding: 0.75rem 1rem;
+      vertical-align: middle;
+    }
+
+    .rank-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .rank-badge.rank-1 { background: var(--selected); color: var(--white); }
+    .rank-badge.rank-2 { background: var(--selected-light); color: var(--selected); }
+    .rank-badge.rank-3 { background: var(--neutral-200); color: var(--neutral-600); }
+    .rank-badge.rank-n { background: var(--neutral-100); color: var(--neutral-500); font-size: 0.65rem; }
+
+    .ranking-table .selected-rank-row {
+      background: var(--selected-light);
+    }
+
+    .ranking-table .discarded-row {
+      opacity: 0.6;
+      background: var(--neutral-50);
+    }
+
+    .status-tag {
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+
+    .status-selected  { background: var(--selected); color: var(--white); }
+    .status-discarded { background: var(--neutral-200); color: var(--neutral-600); }
+    .status-deferred  { background: var(--primary-light); color: var(--primary); }
+
+    /* ── TIEBREAK CARD ── */
+    .tiebreak-card {
+      background: var(--white);
+      border: 1.5px solid var(--neutral-200);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+
+    .tiebreak-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .tiebreak-option {
+      border-radius: 10px;
+      padding: 1rem;
+      border: 1.5px solid var(--neutral-200);
+    }
+
+    .tiebreak-option.loser {
+      background: var(--neutral-50);
+      border-color: var(--neutral-200);
+    }
+
+    .tiebreak-option.winner {
+      background: var(--selected-light);
+      border-color: var(--selected);
+    }
+
+    .tiebreak-option .opt-label {
+      font-size: 0.62rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      margin-bottom: 0.3rem;
+    }
+
+    .tiebreak-option.loser .opt-label  { color: var(--neutral-500); }
+    .tiebreak-option.winner .opt-label { color: var(--selected); }
+
+    .tiebreak-option .opt-node {
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .tiebreak-option.loser .opt-node  { color: var(--neutral-700); }
+    .tiebreak-option.winner .opt-node { color: var(--selected-dark); }
+
+    .tiebreak-option .opt-angle {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--neutral-600);
+      margin-bottom: 0.5rem;
+    }
+
+    .tiebreak-option .opt-arg {
+      font-size: 0.77rem;
+      color: var(--neutral-600);
+      line-height: 1.45;
+    }
+
+    .tiebreak-option.winner .opt-arg { color: var(--neutral-800); }
+
+    .decision-box {
+      background: var(--neutral-900);
+      color: var(--white);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+
+    .decision-box strong { color: #93C5FD; }
+
+    /* ── SELECTED OPPORTUNITY CARD ── */
+    .selected-opp-card {
+      background: var(--selected-light);
+      border: 2px solid var(--selected);
+      border-radius: 14px;
+      padding: 1.75rem 2rem;
+    }
+
+    .selected-opp-card .opp-kicker {
+      font-size: 0.67rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--selected);
+      margin-bottom: 0.5rem;
+    }
+
+    .selected-opp-card h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--neutral-900);
+      line-height: 1.4;
+      margin-bottom: 1.25rem;
+    }
+
+    .rationale-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .rationale-item {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+
+    .rationale-item .rat-num {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--selected);
+      color: var(--white);
+      font-size: 0.62rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 0.05rem;
+    }
+
+    .rationale-item .rat-text {
+      font-size: 0.82rem;
+      color: var(--neutral-800);
+      line-height: 1.45;
+    }
+
+    .rationale-item .rat-text strong { color: var(--neutral-900); }
+
+    .b11-note {
+      margin-top: 1.25rem;
+      padding: 0.9rem 1.1rem;
+      background: rgba(255,255,255,0.6);
+      border-radius: 8px;
+      border-left: 3px solid var(--selected);
+      font-size: 0.78rem;
+      color: var(--neutral-700);
+      line-height: 1.45;
+    }
+
+    /* ── FOOTER ── */
+    .page-footer {
+      max-width: 1100px;
+      margin: 3rem auto 0;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--neutral-200);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-meta {
+      font-size: 0.68rem;
+      color: var(--neutral-400);
+      line-height: 1.5;
+    }
+
+    .footer-ai {
+      font-size: 0.68rem;
+      color: var(--neutral-400);
+      text-align: right;
+    }
+
+    @media (max-width: 900px) {
+      .criteria-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 600px) {
+      .criteria-grid { grid-template-columns: 1fr; }
+      .tiebreak-row  { grid-template-columns: 1fr; }
+      body { padding: 1.5rem 1rem 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- PAGE HEADER -->
+<header class="page-header">
+  <div class="header-left">
+    <div class="kicker">Shape · Cycle 01 · 2026</div>
+    <h1>Opportunity Sizing &amp; Prioritization</h1>
+    <div class="subtitle">Coverage &amp; Inquiries Squad &nbsp;·&nbsp; NexHealth / Coverwise</div>
+  </div>
+  <div class="header-right">
+    Generated: 2026-05-06<br>
+    Last modified: 2026-05-06<br>
+    Author: Claude (Shape facilitator)
+  </div>
+</header>
+
+<main class="content">
+
+  <!-- ──────────────────────────────────────────── -->
+  <!-- SECTION 1 — SCORING CRITERIA                -->
+  <!-- ──────────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">1</div>
+      <div class="section-title">Scoring Criteria</div>
+    </div>
+
+    <div class="criteria-grid">
+      <div class="criterion-card">
+        <div class="crit-name">Reach</div>
+        <div class="crit-desc">% of users in the journey who hit this obstacle</div>
+        <div class="crit-levels">
+          <div class="crit-level score-1"><div class="score-dot">1</div> &lt; 20% of users</div>
+          <div class="crit-level score-2"><div class="score-dot">2</div> 20–60% of users</div>
+          <div class="crit-level score-3"><div class="score-dot">3</div> &gt; 60% of users</div>
+        </div>
+      </div>
+      <div class="criterion-card">
+        <div class="crit-name">Frequency</div>
+        <div class="crit-desc">How often the same user encounters this obstacle</div>
+        <div class="crit-levels">
+          <div class="crit-level score-1"><div class="score-dot">1</div> Rare / one-off</div>
+          <div class="crit-level score-2"><div class="score-dot">2</div> Occasional</div>
+          <div class="crit-level score-3"><div class="score-dot">3</div> Frequent / always</div>
+        </div>
+      </div>
+      <div class="criterion-card">
+        <div class="crit-name">OKR Alignment</div>
+        <div class="crit-desc">Direct impact on KR1 (calls), KR2 (self-service), or KR3 (NPS)</div>
+        <div class="crit-levels">
+          <div class="crit-level score-1"><div class="score-dot">1</div> Indirect impact</div>
+          <div class="crit-level score-2"><div class="score-dot">2</div> Partial alignment</div>
+          <div class="crit-level score-3"><div class="score-dot">3</div> Direct on ≥1 KR</div>
+        </div>
+      </div>
+      <div class="criterion-card">
+        <div class="crit-name">Assumption Confidence</div>
+        <div class="crit-desc">Certainty that this is a real problem given available context</div>
+        <div class="crit-levels">
+          <div class="crit-level score-1"><div class="score-dot">1</div> Low (hypothesis)</div>
+          <div class="crit-level score-2"><div class="score-dot">2</div> Medium (inferred)</div>
+          <div class="crit-level score-3"><div class="score-dot">3</div> High (implicit evidence)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="formula-note">
+      <strong>Base score = Reach + Frequency + OKR Alignment + Confidence</strong> &nbsp;(max: 12) &nbsp;·&nbsp;
+      Effort acts as a tiebreaker, not a penalty — lower effort favors selection when scores are equal.
+    </div>
+  </div>
+
+  <!-- ──────────────────────────────────────────── -->
+  <!-- SECTION 2 — SCORING BY NODE                 -->
+  <!-- ──────────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">2</div>
+      <div class="section-title">Scoring by Leaf Node</div>
+    </div>
+
+    <!-- BRANCH A -->
+    <div class="scoring-block">
+      <div class="branch-label">Branch A — Finding the right channel</div>
+      <table class="scoring-table">
+        <thead>
+          <tr>
+            <th style="width:5%">ID</th>
+            <th style="width:38%">Opportunity</th>
+            <th>Reach</th>
+            <th>Freq.</th>
+            <th>OKR</th>
+            <th>Conf.</th>
+            <th>Score</th>
+            <th>Effort</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="node-id-cell">A1.1</td>
+            <td class="node-text-cell">Can't find where to submit a query inside the app</td>
+            <td><span class="score-chip score-2">2</span></td>
+            <td><span class="score-chip score-1">1</span></td>
+            <td><span class="score-chip score-2">2</span></td>
+            <td><span class="score-chip score-2">2</span></td>
+            <td><span class="total-chip mid">7</span></td>
+            <td><span class="effort-chip effort-high">High</span></td>
+          </tr>
+          <tr>
+            <td class="node-id-cell">A1.2</td>
+            <td class="node-text-cell">Doesn't know they can use natural language</td>
+            <td><span class="score-chip score-3">3</span></td>
+            <td><span class="score-chip score-2">2</span></td>
+            <td><span class="score-chip score-3">3</span></td>
+            <td><span class="score-chip score-2">2</span></td>
+            <td><span class="total-chip mid">10</span></td>
+            <td><span class="effort-chip effort-high">High</span></td>
+          </tr>
+          <tr>
+            <td class="node-id-cell">A1.3</td>
+            <td class="node-text-cell">Calls the call center without attempting digital first</td>
+            <td><span class="score-chip score-3">3</span></td>
+            <td><span class="score-chip score-3">3</span></td>
+            <td><span class="score-chip score-3">3</span></td>
+            <td><span class="score-chip score-2">2</span></td>
+            <td><span class="total-chip high">11</span></td>
+            <td><span class="effort-chip effort-low">Low</span></td>
+          </tr>
+          <tr class="note-row">
+            <td colspan="8">⚠ A1.3: High score but low product leverage — changing the habit of calling requires communication, incentives, and prior trust. Not the best entry point for I&V.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- BRANCH B -->
+    <div class="scoring-block">
+      <div class="branch-label">Branch B — Formulating the query</div>
+      <table class="scoring-table">
+        <thead>
+          <tr>
+            <th style="width:5%">ID</th>
+            <th style="width:38%">Opportunity</th>
+            <th>Reach</th>
+            <th>Freq.</th>
+            <th>OKR</th>
+            <th>Conf.</th>
+            <th>Score</th>
+            <th>Effort</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="node-id-cell">B1.1</td>
+            <td class="node-text-cell">Uses a colloquial procedure name that the system doesn't recognize</td>
+            <td><span class="score-chip score-3">3</span></td>
+            <td><span class="score-chip score-3">3</span></td>
+            <td><span class="score-chip score-3">3</span></td>
+            <td><span class="score-chip score-3">3</span></td>
+            <td><span class="total-chip high">12</span></td>
+            <td><span class="effort-chip effort-medium">Medium</span></td>
+          </tr>
+          <tr class="note-row">
+            <td colspan="8">High confidence: strategy context explicitly states "the bot only understands keywords and responds with PDF forms." B1.1 is the root cause behind that description.</td>
+          </tr>
+          <tr>
+            <td class="node-id-cell">B1.2</td>
+            <td class="node-text-cell">Doesn't know the procedure name and can't describe it</td>
+            <td><span class="score-chip score-2">2</span></td>
+            <td><span class="score-chip score-2">2</span></td>
+            <td><span class="score-chip score-2">2</span></td>
+            <td><span class="score-chip score-2">2</span></td>
+            <td><span class="total-chip mid">8</span></td>
+            <td><span class="effort-chip effort-medium">Medium</span></td>
+          </tr>
+          <tr>
+            <td class="node-id-cell">B1.3</td>
+            <td class="node-text-cell">Asks a compound query but only gets a partial answer</td>
+            <td><span class="score-chip score-1">1</span></td>
+            <td><span class="score-chip score-1">1</span></td>
+            <td><span class="score-chip score-1">1</span></td>
+            <td><span class="score-chip score-1">1</span></td>
+            <td><span class="total-chip low">4</span></td>
+            <td><span class="effort-chip effort-medium">Medium</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- BRANCH C -->
+    <div class="scoring-block">
+      <div class="branch-label" style="background:var(--selected-light); color:var(--selected-dark);">Branch C — Getting a reliable answer &nbsp;·&nbsp; On selected path</div>
+      <table class="scoring-table">
+        <thead>
+          <tr>
+            <th style="width:5%">ID</th>
+            <th style="width:38%">Opportunity</th>
+            <th>Reach</th>
+            <th>Freq.</th>
+            <th>OKR</th>
+            <th>Conf.</th>
+            <th>Score</th>
+            <th>Effort</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="selected-row">
+            <td class="node-id-cell" style="color:var(--selected);">C1.1</td>
+            <td class="node-text-cell"><strong>Response is ambiguous or technical — doesn't generate action</strong> &nbsp;<span class="status-tag status-selected">✦ Selected</span></td>
+            <td><span class="score-chip score-3">3</span></td>
+            <td><span class="score-chip score-3">3</span></td>
+            <td><span class="score-chip score-3">3</span></td>
+            <td><span class="score-chip score-3">3</span></td>
+            <td><span class="total-chip high">12</span></td>
+            <td><span class="effort-chip effort-medium">Medium</span></td>
+          </tr>
+          <tr class="note-row">
+            <td colspan="8">High confidence: KR3 (NPS post-inquiry) is the only KR marked <code>at_risk</code> while KR1 and KR2 are <code>on_track</code>. Users are using the digital channel — but the experience doesn't satisfy. Direct signal toward response quality.</td>
+          </tr>
+          <tr>
+            <td class="node-id-cell">C1.2</td>
+            <td class="node-text-cell">Doesn't know if the response applies to their specific plan</td>
+            <td><span class="score-chip score-2">2</span></td>
+            <td><span class="score-chip score-2">2</span></td>
+            <td><span class="score-chip score-2">2</span></td>
+            <td><span class="score-chip score-2">2</span></td>
+            <td><span class="total-chip mid">8</span></td>
+            <td><span class="effort-chip effort-medium">Medium</span></td>
+          </tr>
+          <tr>
+            <td class="node-id-cell">C1.3</td>
+            <td class="node-text-cell">Receives a response but doesn't trust it — "the system gets it wrong"</td>
+            <td><span class="score-chip score-2">2</span></td>
+            <td><span class="score-chip score-2">2</span></td>
+            <td><span class="score-chip score-2">2</span></td>
+            <td><span class="score-chip score-2">2</span></td>
+            <td><span class="total-chip low">8</span></td>
+            <td><span class="effort-chip effort-low">Low</span></td>
+          </tr>
+          <tr class="note-row">
+            <td colspan="8">C1.3: Long-term trust issue — not attackable within 3 months with a product-only intervention.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- BRANCH D -->
+    <div class="scoring-block">
+      <div class="branch-label">Branch D — Acting after the response</div>
+      <table class="scoring-table">
+        <thead>
+          <tr>
+            <th style="width:5%">ID</th>
+            <th style="width:38%">Opportunity</th>
+            <th>Reach</th>
+            <th>Freq.</th>
+            <th>OKR</th>
+            <th>Conf.</th>
+            <th>Score</th>
+            <th>Effort</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="node-id-cell">D1.1</td>
+            <td class="node-text-cell">Knows they're covered but doesn't know how to schedule or where to go</td>
+            <td><span class="score-chip score-3">3</span></td>
+            <td><span class="score-chip score-3">3</span></td>
+            <td><span class="score-chip score-2">2</span></td>
+            <td><span class="score-chip score-2">2</span></td>
+            <td><span class="total-chip mid">10</span></td>
+            <td><span class="effort-chip effort-high">High</span></td>
+          </tr>
+          <tr>
+            <td class="node-id-cell">D1.2</td>
+            <td class="node-text-cell">Needs to show coverage at the clinic but can't save or share the response</td>
+            <td><span class="score-chip score-2">2</span></td>
+            <td><span class="score-chip score-2">2</span></td>
+            <td><span class="score-chip score-1">1</span></td>
+            <td><span class="score-chip score-2">2</span></td>
+            <td><span class="total-chip low">7</span></td>
+            <td><span class="effort-chip effort-high">High</span></td>
+          </tr>
+          <tr>
+            <td class="node-id-cell">D1.3</td>
+            <td class="node-text-cell">Knows they're NOT covered but doesn't know what options they have</td>
+            <td><span class="score-chip score-2">2</span></td>
+            <td><span class="score-chip score-2">2</span></td>
+            <td><span class="score-chip score-2">2</span></td>
+            <td><span class="score-chip score-2">2</span></td>
+            <td><span class="total-chip mid">8</span></td>
+            <td><span class="effort-chip effort-medium">Medium</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ──────────────────────────────────────────── -->
+  <!-- SECTION 3 — CONSOLIDATED RANKING            -->
+  <!-- ──────────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">3</div>
+      <div class="section-title">Consolidated Ranking</div>
+    </div>
+
+    <table class="ranking-table">
+      <thead>
+        <tr>
+          <th style="width:5%">#</th>
+          <th style="width:8%">Node</th>
+          <th>Opportunity</th>
+          <th style="width:8%; text-align:center;">Score</th>
+          <th style="width:10%">Effort</th>
+          <th style="width:10%">Status</th>
+          <th style="width:28%">Note</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="selected-rank-row">
+          <td><span class="rank-badge rank-1">1</span></td>
+          <td style="font-weight:700; color:var(--selected); font-size:0.78rem;">C1.1</td>
+          <td style="font-weight:600; font-size:0.83rem;">Response is ambiguous or technical — doesn't generate action</td>
+          <td style="text-align:center;"><span class="total-chip high">12</span></td>
+          <td><span class="effort-chip effort-medium">Medium</span></td>
+          <td><span class="status-tag status-selected">✦ Selected</span></td>
+          <td style="font-size:0.73rem; color:var(--neutral-700);">Directly explains KR3 <code>at_risk</code>. Widest impact surface — all users who receive a response.</td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge rank-2">2</span></td>
+          <td style="font-weight:700; color:var(--neutral-700); font-size:0.78rem;">B1.1</td>
+          <td style="font-size:0.83rem;">Uses a colloquial procedure name the system doesn't recognize</td>
+          <td style="text-align:center;"><span class="total-chip high">12</span></td>
+          <td><span class="effort-chip effort-medium">Medium</span></td>
+          <td><span class="status-tag status-deferred">Deferred</span></td>
+          <td style="font-size:0.73rem; color:var(--neutral-600);">Root cause of keyword-matching problem. Likely part of the solution to C1.1 in I&V.</td>
+        </tr>
+        <tr class="discarded-row">
+          <td><span class="rank-badge rank-3">3</span></td>
+          <td style="font-size:0.78rem; color:var(--neutral-600);">A1.3</td>
+          <td style="font-size:0.83rem; color:var(--neutral-600);">Calls without attempting digital first</td>
+          <td style="text-align:center;"><span class="total-chip high">11</span></td>
+          <td><span class="effort-chip effort-low">Low</span></td>
+          <td><span class="status-tag status-discarded">Discarded</span></td>
+          <td style="font-size:0.73rem; color:var(--neutral-500);">Low product leverage. Behavior change requires comms + incentives, not features.</td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge rank-n">4</span></td>
+          <td style="font-size:0.78rem; color:var(--neutral-600);">A1.2</td>
+          <td style="font-size:0.83rem; color:var(--neutral-600);">Doesn't know they can use natural language</td>
+          <td style="text-align:center;"><span class="total-chip mid">10</span></td>
+          <td><span class="effort-chip effort-high">High</span></td>
+          <td><span class="status-tag status-deferred">Deferred</span></td>
+          <td style="font-size:0.73rem; color:var(--neutral-600);">Valid onboarding opportunity. Second line.</td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge rank-n">5</span></td>
+          <td style="font-size:0.78rem; color:var(--neutral-600);">D1.1</td>
+          <td style="font-size:0.83rem; color:var(--neutral-600);">Covered but doesn't know what to do next</td>
+          <td style="text-align:center;"><span class="total-chip mid">10</span></td>
+          <td><span class="effort-chip effort-high">High</span></td>
+          <td><span class="status-tag status-deferred">Deferred</span></td>
+          <td style="font-size:0.73rem; color:var(--neutral-600);">Post-response value opportunity. High effort at current stage.</td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge rank-n">6–9</span></td>
+          <td style="font-size:0.78rem; color:var(--neutral-500);">B1.2, C1.2, C1.3, D1.3</td>
+          <td style="font-size:0.83rem; color:var(--neutral-500);">Second line</td>
+          <td style="text-align:center;"><span class="total-chip low">8</span></td>
+          <td>—</td>
+          <td><span class="status-tag status-deferred">Deferred</span></td>
+          <td style="font-size:0.73rem; color:var(--neutral-500);">Valid but lower priority. Worth revisiting after Cycle 01.</td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge rank-n">10–11</span></td>
+          <td style="font-size:0.78rem; color:var(--neutral-400);">A1.1, D1.2</td>
+          <td style="font-size:0.83rem; color:var(--neutral-400);">Lower impact</td>
+          <td style="text-align:center;"><span class="total-chip low">7</span></td>
+          <td>—</td>
+          <td><span class="status-tag status-discarded">Out</span></td>
+          <td style="font-size:0.73rem; color:var(--neutral-400);">Narrow impact. Not actionable this cycle.</td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge rank-n">12</span></td>
+          <td style="font-size:0.78rem; color:var(--neutral-400);">B1.3</td>
+          <td style="font-size:0.83rem; color:var(--neutral-400);">Compound query not handled</td>
+          <td style="text-align:center;"><span class="total-chip low">4</span></td>
+          <td>—</td>
+          <td><span class="status-tag status-discarded">Out</span></td>
+          <td style="font-size:0.73rem; color:var(--neutral-400);">Edge case. Low reach, low frequency.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ──────────────────────────────────────────── -->
+  <!-- SECTION 4 — TIE-BREAK ANALYSIS              -->
+  <!-- ──────────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">4</div>
+      <div class="section-title">Tie-Break Analysis — B1.1 vs C1.1 (both scored 12)</div>
+    </div>
+
+    <div class="tiebreak-card">
+      <div class="tiebreak-row">
+        <div class="tiebreak-option loser">
+          <div class="opt-label">Contender</div>
+          <div class="opt-node">B1.1 — Vocabulary mismatch</div>
+          <div class="opt-angle">Input problem: user can't express what they need</div>
+          <div class="opt-arg">Most upstream problem. If the system can't understand the query, it never reaches a good response. Solving B1.1 might unlock C1.1 as a downstream benefit.</div>
+        </div>
+        <div class="tiebreak-option winner">
+          <div class="opt-label">Selected</div>
+          <div class="opt-node">C1.1 — Ambiguous / technical response</div>
+          <div class="opt-angle">Output problem: user gets a response that doesn't drive action</div>
+          <div class="opt-arg"><strong>KR3 (NPS post-inquiry) is at_risk while KR1 and KR2 are on_track.</strong> This means users ARE reaching Coverwise and submitting queries — the problem is not input, it's the quality of what they get back. C1.1 attacks the most urgent indicator directly.</div>
+        </div>
+      </div>
+      <div class="decision-box">
+        <strong>Decision:</strong> In a three-month cycle with a fixed budget, the winning bet is the node with the most direct impact on the most urgent indicator. <strong>KR3 at_risk is the critical signal.</strong> The data confirms adoption — what's broken is the experience. C1.1 is the right entry point.<br><br>
+        Note: B1.1 is not discarded — it's highly likely to emerge as part of the solution to C1.1 during Ideate &amp; Validate.
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────────────────────────────────────── -->
+  <!-- SECTION 5 — SELECTED OPPORTUNITY            -->
+  <!-- ──────────────────────────────────────────── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">5</div>
+      <div class="section-title">Selected Opportunity — Cycle 01</div>
+    </div>
+
+    <div class="selected-opp-card">
+      <div class="opp-kicker">✦ C1.1 — Selected for Ideate &amp; Validate</div>
+      <h2>"The policyholder receives a Coverwise response but it doesn't generate enough clarity or confidence to act without calling."</h2>
+
+      <div class="rationale-list">
+        <div class="rationale-item">
+          <div class="rat-num">1</div>
+          <div class="rat-text"><strong>Urgent indicator:</strong> KR3 (NPS post-inquiry: 28 → 42) is the only KR marked <code>at_risk</code>. KR1 and KR2 are on_track, confirming adoption — the problem is experience quality, not access.</div>
+        </div>
+        <div class="rationale-item">
+          <div class="rat-num">2</div>
+          <div class="rat-text"><strong>Full reach:</strong> Affects every user who receives a response — the entire active user base of Coverwise.</div>
+        </div>
+        <div class="rationale-item">
+          <div class="rat-num">3</div>
+          <div class="rat-text"><strong>Direct traceability to vision:</strong> The product vision is "know if you're covered without calling, without waiting, without forms." A response that doesn't generate confidence acts as an equivalent barrier to all three.</div>
+        </div>
+        <div class="rationale-item">
+          <div class="rat-num">4</div>
+          <div class="rat-text"><strong>High confidence:</strong> KR3 at_risk is implicit evidence in the strategic context — not a pure assumption.</div>
+        </div>
+        <div class="rationale-item">
+          <div class="rat-num">5</div>
+          <div class="rat-text"><strong>Rich solution space:</strong> Natural language responses, plan-level personalization, confidence indicators, conversational tone — all within the scope of a 3-week I&V cycle.</div>
+        </div>
+      </div>
+
+      <div class="b11-note">
+        <strong>On B1.1:</strong> Not discarded — it is highly probable that vocabulary recognition emerges as a component of the solution to C1.1 during Ideate &amp; Validate. A trustworthy response presupposes correctly understanding the query.
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="page-footer">
+  <div class="footer-meta">
+    Source: <code>shape/oportunidades-sizing-priorizacion.md</code> &nbsp;·&nbsp; v1.0 &nbsp;·&nbsp; Shape Cycle 01, 2026<br>
+    Author: Claude (Shape facilitator) &nbsp;·&nbsp; Last modified: 2026-05-06 &nbsp;·&nbsp; Methodology: Torres, <em>Continuous Discovery Habits</em>, Ch. 7
+  </div>
+  <div class="footer-ai">Generated with assistance from Claude</div>
+</footer>
+
+</body>
+</html>

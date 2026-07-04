@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solution Assumptions — Coverwise Conversational Response — I&V Cycle 01</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary:        #1D4ED8;
+      --primary-light:  #DBEAFE;
+      --primary-border: #93C5FD;
+      --selected:       #7C3AED;
+      --selected-light: #EDE9FE;
+      --selected-dark:  #6D28D9;
+      --rank1:          #059669;
+      --rank1-light:    #D1FAE5;
+      --rank1-border:   #6EE7B7;
+      --warn:           #D97706;
+      --warn-light:     #FEF3C7;
+      --warn-border:    #FCD34D;
+      --error:          #DC2626;
+      --error-light:    #FEE2E2;
+      --postbuild:      #0891B2;
+      --postbuild-light:#CFFAFE;
+      --postbuild-brd:  #67E8F9;
+      --neutral-900:    #0F172A;
+      --neutral-800:    #1E293B;
+      --neutral-700:    #334155;
+      --neutral-600:    #475569;
+      --neutral-500:    #64748B;
+      --neutral-400:    #94A3B8;
+      --neutral-300:    #CBD5E1;
+      --neutral-200:    #E2E8F0;
+      --neutral-100:    #F1F5F9;
+      --neutral-50:     #F8FAFC;
+      --white:          #FFFFFF;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--neutral-50);
+      color: var(--neutral-900);
+      min-height: 100vh;
+      padding: 2.5rem 2rem 4rem;
+    }
+
+    /* ── HEADER ── */
+    .page-header {
+      max-width: 1100px; margin: 0 auto 2.5rem;
+      display: flex; justify-content: space-between; align-items: flex-end;
+      padding-bottom: 1.25rem; border-bottom: 2px solid var(--neutral-200); gap: 1rem;
+    }
+    .header-left .kicker {
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--primary); margin-bottom: 0.35rem;
+    }
+    .header-left h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; }
+    .header-left .subtitle { font-size: 0.85rem; color: var(--neutral-500); margin-top: 0.3rem; }
+    .header-right { text-align: right; font-size: 0.72rem; color: var(--neutral-400); line-height: 1.6; flex-shrink: 0; }
+
+    /* ── CONTENT ── */
+    .content { max-width: 1100px; margin: 0 auto; }
+
+    /* ── SOLUTION BANNER ── */
+    .solution-banner {
+      background: var(--neutral-900); color: var(--white);
+      border-radius: 12px; padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1.25rem;
+      align-items: center;
+    }
+    .solution-banner .sol-node {
+      background: var(--selected); color: var(--white);
+      border-radius: 6px; font-size: 0.72rem; font-weight: 700;
+      padding: 0.35rem 0.7rem; white-space: nowrap;
+    }
+    .solution-banner .sol-name { font-size: 0.88rem; line-height: 1.4; color: rgba(255,255,255,0.9); }
+    .solution-banner .sol-name strong { color: var(--white); }
+
+    /* ── METHODOLOGY NOTE ── */
+    .method-note {
+      background: var(--primary-light);
+      border: 1px solid var(--primary-border);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-size: 0.78rem;
+      color: var(--primary);
+      margin-bottom: 2rem;
+    }
+
+    /* ── TIER HEADER ── */
+    .tier-header {
+      display: flex; align-items: center; gap: 0.75rem;
+      margin-bottom: 1rem; padding: 0.65rem 1rem;
+      border-radius: 8px;
+    }
+    .tier-header.resolved  { background: var(--rank1-light); }
+    .tier-header.prebuild  { background: var(--warn-light); }
+    .tier-header.postbuild { background: var(--postbuild-light); }
+
+    .tier-dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    }
+    .resolved-dot  { background: var(--rank1); }
+    .prebuild-dot  { background: var(--warn); }
+    .postbuild-dot { background: var(--postbuild); }
+
+    .tier-label {
+      font-size: 0.78rem; font-weight: 700;
+    }
+    .tier-header.resolved  .tier-label { color: var(--rank1); }
+    .tier-header.prebuild  .tier-label { color: var(--warn); }
+    .tier-header.postbuild .tier-label { color: var(--postbuild); }
+
+    .tier-desc {
+      font-size: 0.75rem;
+    }
+    .tier-header.resolved  .tier-desc { color: #065F46; }
+    .tier-header.prebuild  .tier-desc { color: #78350F; }
+    .tier-header.postbuild .tier-desc { color: #164E63; }
+
+    /* ── ASSUMPTIONS TABLE ── */
+    .assumptions-section { margin-bottom: 2.5rem; }
+
+    .assumptions-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+
+    .assumptions-table thead th {
+      background: var(--neutral-900); color: var(--white);
+      padding: 0.6rem 0.9rem; font-size: 0.65rem; font-weight: 600;
+      letter-spacing: 0.07em; text-transform: uppercase; text-align: left;
+    }
+
+    .assumptions-table tbody tr { border-bottom: 1px solid var(--neutral-200); background: var(--white); }
+    .assumptions-table tbody tr:last-child { border-bottom: none; }
+    .assumptions-table tbody tr:hover { background: var(--neutral-50); }
+
+    .assumptions-table td {
+      padding: 0.85rem 0.9rem; vertical-align: top; line-height: 1.45; color: var(--neutral-700);
+    }
+
+    .assumptions-table td.cell-id {
+      font-size: 0.7rem; font-weight: 800; white-space: nowrap;
+      width: 5%;
+    }
+
+    /* Tier color on id cell */
+    .resolved-row .cell-id  { color: var(--rank1); }
+    .prebuild-row .cell-id  { color: var(--warn); }
+    .postbuild-row .cell-id { color: var(--postbuild); }
+
+    .assumptions-table td.cell-assumption {
+      color: var(--neutral-800); font-weight: 500;
+    }
+    .prebuild-row .cell-assumption { color: var(--neutral-900); font-weight: 600; }
+
+    /* Type badge */
+    .type-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 24px; height: 24px; border-radius: 6px;
+      font-size: 0.65rem; font-weight: 800; flex-shrink: 0;
+    }
+    .type-D { background: #FEF3C7; color: #92400E; }
+    .type-U { background: #DBEAFE; color: #1E40AF; }
+    .type-V { background: #D1FAE5; color: #065F46; }
+
+    /* Evidence / risk cells */
+    .cell-evidence { font-size: 0.77rem; color: var(--neutral-600); }
+    .cell-evidence .ev-tag {
+      display: inline-block;
+      font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; padding: 0.15rem 0.45rem; border-radius: 4px;
+      margin-bottom: 0.25rem;
+    }
+    .ev-tag.strong  { background: var(--rank1-light); color: var(--rank1); }
+    .ev-tag.weak    { background: var(--warn-light); color: var(--warn); }
+    .ev-tag.none    { background: var(--neutral-100); color: var(--neutral-500); }
+    .ev-tag.postbuild-tag { background: var(--postbuild-light); color: var(--postbuild); }
+
+    .cell-risk { font-size: 0.75rem; color: var(--error); line-height: 1.4; }
+    .cell-experiment { font-size: 0.77rem; color: var(--postbuild); line-height: 1.4; }
+
+    /* Row highlighting */
+    .resolved-row  td { background: transparent; }
+    .prebuild-row  td { background: #FFFBEB; }
+    .prebuild-row:hover td { background: #FEF3C7; }
+
+    /* ── LEGEND / TYPE TABLE ── */
+    .type-legend {
+      display: flex; gap: 1.25rem; flex-wrap: wrap;
+      align-items: center;
+      background: var(--white);
+      border: 1px solid var(--neutral-200);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+    }
+    .type-legend-label {
+      font-size: 0.67rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--neutral-500); margin-right: 0.25rem;
+    }
+    .type-legend-item {
+      display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; color: var(--neutral-700);
+    }
+
+    /* ── SUMMARY CHIPS ── */
+    .summary-bar {
+      display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2rem;
+    }
+    .summary-chip {
+      display: flex; align-items: center; gap: 0.5rem;
+      border-radius: 8px; padding: 0.65rem 0.9rem; border: 1.5px solid;
+      flex: 1; min-width: 160px;
+    }
+    .summary-chip.resolved-chip  { background: var(--rank1-light); border-color: var(--rank1-border); }
+    .summary-chip.prebuild-chip  { background: var(--warn-light); border-color: var(--warn-border); }
+    .summary-chip.postbuild-chip { background: var(--postbuild-light); border-color: var(--postbuild-brd); }
+    .summary-chip .chip-num {
+      font-size: 1.8rem; font-weight: 800; line-height: 1; letter-spacing: -0.04em;
+    }
+    .resolved-chip .chip-num  { color: var(--rank1); }
+    .prebuild-chip .chip-num  { color: var(--warn); }
+    .postbuild-chip .chip-num { color: var(--postbuild); }
+    .chip-text { font-size: 0.75rem; line-height: 1.3; }
+    .resolved-chip .chip-text  { color: #065F46; }
+    .prebuild-chip .chip-text  { color: #78350F; }
+    .postbuild-chip .chip-text { color: #164E63; }
+    .chip-text strong { display: block; font-weight: 700; font-size: 0.8rem; }
+
+    /* ── FOOTER ── */
+    .page-footer {
+      max-width: 1100px; margin: 3rem auto 0;
+      padding-top: 1.25rem; border-top: 1px solid var(--neutral-200);
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 1rem; flex-wrap: wrap;
+    }
+    .footer-meta { font-size: 0.68rem; color: var(--neutral-400); line-height: 1.5; }
+    .footer-ai   { font-size: 0.68rem; color: var(--neutral-400); text-align: right; }
+
+    @media (max-width: 600px) { body { padding: 1.5rem 1rem 3rem; } .summary-bar { flex-direction: column; } }
+  </style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="header-left">
+    <div class="kicker">Ideate &amp; Validate · Cycle 01 · 2026</div>
+    <h1>Solution Assumptions</h1>
+    <div class="subtitle">Coverage &amp; Inquiries Squad &nbsp;·&nbsp; NexHealth / Coverwise</div>
+  </div>
+  <div class="header-right">
+    Generated: 2026-05-06<br>
+    Last modified: 2026-05-06<br>
+    Author: Claude (I&amp;V facilitator)
+  </div>
+</header>
+
+<main class="content">
+
+  <!-- SOLUTION BANNER -->
+  <div class="solution-banner">
+    <div class="sol-node">Solution — Cycle 01</div>
+    <div class="sol-name">
+      <strong>Coverwise Conversational Response</strong> — LLM-generated plain-language response (Idea 1) + plan &amp; certainty indicator (Idea 2) + next step suggestion (Idea 3), targeting opportunity C1.1.
+    </div>
+  </div>
+
+  <!-- METHOD NOTE -->
+  <div class="method-note">
+    Methodology: Torres, <em>Continuous Discovery Habits</em>, Ch. 9 — Identifying Hidden Assumptions. Assumptions are classified by type (Desirable · Usable · Viable) and organized in three validation tiers.
+  </div>
+
+  <!-- SUMMARY BAR -->
+  <div class="summary-bar">
+    <div class="summary-chip resolved-chip">
+      <div class="chip-num">4</div>
+      <div class="chip-text"><strong>Resolved</strong>Sufficient evidence to proceed without dedicated validation</div>
+    </div>
+    <div class="summary-chip prebuild-chip">
+      <div class="chip-num">3</div>
+      <div class="chip-text"><strong>Pre-build</strong>Must validate before investing in development</div>
+    </div>
+    <div class="summary-chip postbuild-chip">
+      <div class="chip-num">3</div>
+      <div class="chip-text"><strong>Post-build</strong>Only measurable with real product and live traffic</div>
+    </div>
+  </div>
+
+  <!-- TYPE LEGEND -->
+  <div class="type-legend" style="margin-bottom:2rem;">
+    <span class="type-legend-label">Assumption type</span>
+    <div class="type-legend-item"><span class="type-badge type-D">D</span> Desirable — do users want this?</div>
+    <div class="type-legend-item"><span class="type-badge type-U">U</span> Usable — can they use it without friction?</div>
+    <div class="type-legend-item"><span class="type-badge type-V">V</span> Viable — does it deliver the business outcome?</div>
+  </div>
+
+  <!-- ── TIER 1 — RESOLVED ── -->
+  <div class="assumptions-section">
+    <div class="tier-header resolved">
+      <div class="tier-dot resolved-dot"></div>
+      <div>
+        <div class="tier-label">Tier 1 — Resolved</div>
+        <div class="tier-desc">Sufficient evidence from available strategic context. No dedicated validation needed before proceeding.</div>
+      </div>
+    </div>
+    <table class="assumptions-table">
+      <thead>
+        <tr>
+          <th style="width:5%">#</th>
+          <th style="width:40%">Assumption</th>
+          <th style="width:5%; text-align:center;">Type</th>
+          <th>Evidence that resolves it</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="resolved-row">
+          <td class="cell-id">SA-1</td>
+          <td class="cell-assumption">Policyholders are actively using Coverwise to submit coverage queries</td>
+          <td style="text-align:center;"><span class="type-badge type-V">V</span></td>
+          <td class="cell-evidence">
+            <div class="ev-tag strong">Strong</div>
+            KR1 and KR2 are both <code>on_track</code> — digital channel adoption is confirmed. The problem is not access.
+          </td>
+        </tr>
+        <tr class="resolved-row">
+          <td class="cell-id">SA-2</td>
+          <td class="cell-assumption">The current system responds with technical policy language, not conversational language</td>
+          <td style="text-align:center;"><span class="type-badge type-D">D</span></td>
+          <td class="cell-evidence">
+            <div class="ev-tag strong">Strong</div>
+            Product strategy document explicitly states: "the bot only understands keywords and responds with PDF forms."
+          </td>
+        </tr>
+        <tr class="resolved-row">
+          <td class="cell-id">SA-3</td>
+          <td class="cell-assumption">Coverage data by plan exists in the legacy system's APIs</td>
+          <td style="text-align:center;"><span class="type-badge type-V">V</span></td>
+          <td class="cell-evidence">
+            <div class="ev-tag strong">Strong</div>
+            Tech context: "REST APIs available with ~2s latency and complex data schema." Complex but usable.
+          </td>
+        </tr>
+        <tr class="resolved-row">
+          <td class="cell-id">SA-4</td>
+          <td class="cell-assumption">Plan differences between policyholders justify personalizing the response</td>
+          <td style="text-align:center;"><span class="type-badge type-V">V</span></td>
+          <td class="cell-evidence">
+            <div class="ev-tag strong">Strong</div>
+            NexHealth operates multiple digital plans across Chile, Colombia, and Mexico. Cross-plan variation is inherent to the product.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── TIER 2 — PRE-BUILD ── -->
+  <div class="assumptions-section">
+    <div class="tier-header prebuild">
+      <div class="tier-dot prebuild-dot"></div>
+      <div>
+        <div class="tier-label">Tier 2 — Pre-Build &nbsp;·&nbsp; Validate before development begins</div>
+        <div class="tier-desc">Weak evidence. If these prove false, significant design changes are needed before investing in the build.</div>
+      </div>
+    </div>
+    <table class="assumptions-table">
+      <thead>
+        <tr>
+          <th style="width:5%">#</th>
+          <th style="width:35%">Assumption</th>
+          <th style="width:5%; text-align:center;">Type</th>
+          <th style="width:22%">Current evidence</th>
+          <th>Risk if not validated</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="prebuild-row">
+          <td class="cell-id">SA-5</td>
+          <td class="cell-assumption">A plain-language response generates more confidence than the policy text for the average policyholder</td>
+          <td style="text-align:center;"><span class="type-badge type-D">D</span></td>
+          <td class="cell-evidence">
+            <div class="ev-tag none">Hypothesis</div>
+            No user evidence. This is an assumption of the design team.
+          </td>
+          <td class="cell-risk">If the user prefers the technical text as the "official source," the solution may not generate trust — and could worsen perception relative to the current experience.</td>
+        </tr>
+        <tr class="prebuild-row">
+          <td class="cell-id">SA-6</td>
+          <td class="cell-assumption">Policyholders understand and act on the suggested next step shown after the response</td>
+          <td style="text-align:center;"><span class="type-badge type-U">U</span></td>
+          <td class="cell-evidence">
+            <div class="ev-tag none">Hypothesis</div>
+            No data on post-response CTA usage in the current experience.
+          </td>
+          <td class="cell-risk">If the CTA is consistently ignored, the post-response flow design needs to be rethought before committing to development. The journey closure pillar of the solution would fail.</td>
+        </tr>
+        <tr class="prebuild-row">
+          <td class="cell-id">SA-7</td>
+          <td class="cell-assumption">The LLM can generate coverage responses that are accurate enough, without hallucinating plan conditions</td>
+          <td style="text-align:center;"><span class="type-badge type-V">V</span></td>
+          <td class="cell-evidence">
+            <div class="ev-tag weak">Weak</div>
+            No evaluation done. Requires a technical accuracy test on real coverage data before proceeding.
+          </td>
+          <td class="cell-risk">LLM coverage errors carry legal implications under Chilean and Colombian health insurance regulation. The response is informational — but it cannot induce factual error about the user's coverage.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── TIER 3 — POST-BUILD ── -->
+  <div class="assumptions-section">
+    <div class="tier-header postbuild">
+      <div class="tier-dot postbuild-dot"></div>
+      <div>
+        <div class="tier-label">Tier 3 — Post-Build &nbsp;·&nbsp; Measurable only in production</div>
+        <div class="tier-desc">These assumptions can only be validated with real product and live traffic. Tested via the A/B experiment.</div>
+      </div>
+    </div>
+    <table class="assumptions-table">
+      <thead>
+        <tr>
+          <th style="width:5%">#</th>
+          <th style="width:35%">Assumption</th>
+          <th style="width:5%; text-align:center;">Type</th>
+          <th style="width:22%">Current evidence</th>
+          <th>Experiment</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="cell-id" style="color:var(--postbuild);">SA-8</td>
+          <td class="cell-assumption">Policyholders who receive a conversational response do not call the call center afterward</td>
+          <td style="text-align:center;"><span class="type-badge type-V">V</span></td>
+          <td class="cell-evidence">
+            <div class="ev-tag postbuild-tag">Directional</div>
+            KR3 at_risk suggests they currently do call after using Coverwise. Baseline: unknown % who call within 24h post-inquiry.
+          </td>
+          <td class="cell-experiment">A/B test: % of users who call the call center within 24h of a digital inquiry. Control vs. Conversational Response variant.</td>
+        </tr>
+        <tr>
+          <td class="cell-id" style="color:var(--postbuild);">SA-9</td>
+          <td class="cell-assumption">NPS post-inquiry improves with conversational response + certainty + next step</td>
+          <td style="text-align:center;"><span class="type-badge type-V">V</span></td>
+          <td class="cell-evidence">
+            <div class="ev-tag postbuild-tag">Directional</div>
+            KR3 target: 28 → 42. Current NPS (28) is the baseline for comparison.
+          </td>
+          <td class="cell-experiment">In-app NPS survey (2 questions) measured separately per variant. Primary success criterion: ≥ +5 points in 14 days.</td>
+        </tr>
+        <tr>
+          <td class="cell-id" style="color:var(--postbuild);">SA-10</td>
+          <td class="cell-assumption">The added LLM latency (~1–2s on top of the legacy API) doesn't negatively affect the experience</td>
+          <td style="text-align:center;"><span class="type-badge type-U">U</span></td>
+          <td class="cell-evidence">
+            <div class="ev-tag none">Technical hypothesis</div>
+            Legacy API already has ~2s latency. Total response time with LLM could reach 3–4s.
+          </td>
+          <td class="cell-experiment">Monitor session abandonment rate by total response time. If abandonment increases significantly, add a loading state / streaming response.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+
+<footer class="page-footer">
+  <div class="footer-meta">
+    Source: <code>ideate-validate/solution-assumptions.md</code> &nbsp;·&nbsp; v1.0 &nbsp;·&nbsp; I&amp;V Cycle 01, 2026<br>
+    Author: Claude (I&amp;V facilitator) &nbsp;·&nbsp; Last modified: 2026-05-06 &nbsp;·&nbsp; Methodology: Torres, <em>Continuous Discovery Habits</em>, Ch. 9
+  </div>
+  <div class="footer-ai">Generated with assistance from Claude</div>
+</footer>
+
+</body>
+</html>

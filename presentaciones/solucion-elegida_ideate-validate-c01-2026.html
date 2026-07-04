@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chosen Solution — Coverwise Conversational Response — I&V Cycle 01</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary:        #1D4ED8;
+      --primary-light:  #DBEAFE;
+      --primary-border: #93C5FD;
+      --selected:       #7C3AED;
+      --selected-light: #EDE9FE;
+      --selected-dark:  #6D28D9;
+      --rank1:          #059669;
+      --rank1-light:    #D1FAE5;
+      --rank1-border:   #6EE7B7;
+      --warn:           #D97706;
+      --warn-light:     #FEF3C7;
+      --warn-border:    #FCD34D;
+      --error:          #DC2626;
+      --error-light:    #FEE2E2;
+      --neutral-900:    #0F172A;
+      --neutral-800:    #1E293B;
+      --neutral-700:    #334155;
+      --neutral-600:    #475569;
+      --neutral-500:    #64748B;
+      --neutral-400:    #94A3B8;
+      --neutral-300:    #CBD5E1;
+      --neutral-200:    #E2E8F0;
+      --neutral-100:    #F1F5F9;
+      --neutral-50:     #F8FAFC;
+      --white:          #FFFFFF;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--neutral-50);
+      color: var(--neutral-900);
+      min-height: 100vh;
+      padding: 2.5rem 2rem 4rem;
+    }
+
+    /* ── HEADER ── */
+    .page-header {
+      max-width: 1100px; margin: 0 auto 2.5rem;
+      display: flex; justify-content: space-between; align-items: flex-end;
+      padding-bottom: 1.25rem; border-bottom: 2px solid var(--neutral-200); gap: 1rem;
+    }
+    .header-left .kicker {
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--primary); margin-bottom: 0.35rem;
+    }
+    .header-left h1 {
+      font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2;
+    }
+    .header-left .subtitle {
+      font-size: 0.85rem; color: var(--neutral-500); margin-top: 0.3rem;
+    }
+    .header-right {
+      text-align: right; font-size: 0.72rem; color: var(--neutral-400); line-height: 1.6; flex-shrink: 0;
+    }
+
+    /* ── CONTENT ── */
+    .content { max-width: 1100px; margin: 0 auto; }
+
+    /* ── SECTION ── */
+    .section { margin-bottom: 3rem; }
+    .section-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; }
+    .section-number {
+      display: flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--primary); color: var(--white);
+      font-size: 0.75rem; font-weight: 700; flex-shrink: 0;
+    }
+    .section-title { font-size: 1.05rem; font-weight: 700; }
+
+    /* ── OPPORTUNITY BANNER ── */
+    .opp-banner {
+      background: var(--neutral-900); color: var(--white);
+      border-radius: 12px; padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+      display: flex; align-items: center; gap: 1.25rem;
+    }
+    .opp-banner .opp-node {
+      background: var(--selected); color: var(--white);
+      border-radius: 6px; font-size: 0.72rem; font-weight: 700;
+      padding: 0.25rem 0.6rem; white-space: nowrap; flex-shrink: 0;
+    }
+    .opp-banner .opp-text { font-size: 0.88rem; line-height: 1.4; color: rgba(255,255,255,0.9); }
+    .opp-banner .opp-text strong { color: var(--white); }
+
+    /* ── DECISION CARD ── */
+    .decision-card {
+      background: var(--selected-light);
+      border: 2px solid var(--selected);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .decision-card .dc-kicker {
+      font-size: 0.67rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--selected); margin-bottom: 0.5rem;
+    }
+    .decision-card h2 {
+      font-size: 1.15rem; font-weight: 700; color: var(--neutral-900); margin-bottom: 0.4rem;
+    }
+    .decision-card .dc-outcome {
+      font-size: 0.82rem; color: var(--neutral-700); line-height: 1.5;
+    }
+    .decision-card .dc-outcome strong { color: var(--neutral-900); }
+
+    /* ── THREE PILLARS ── */
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .pillar-card {
+      background: var(--white);
+      border: 1.5px solid var(--selected);
+      border-radius: 10px;
+      padding: 1rem;
+    }
+    .pillar-card .pillar-num {
+      font-size: 1.5rem; font-weight: 800; color: var(--selected);
+      letter-spacing: -0.04em; margin-bottom: 0.3rem;
+    }
+    .pillar-card .pillar-idea {
+      font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--neutral-500); margin-bottom: 0.2rem;
+    }
+    .pillar-card .pillar-title {
+      font-size: 0.88rem; font-weight: 700; color: var(--neutral-900);
+      margin-bottom: 0.4rem; line-height: 1.3;
+    }
+    .pillar-card .pillar-dim {
+      font-size: 0.72rem; color: var(--neutral-600); line-height: 1.4;
+    }
+    .pillar-card .pillar-dim strong { color: var(--selected-dark); }
+
+    .decision-rationale {
+      background: var(--neutral-800); color: var(--white);
+      border-radius: 8px; padding: 1rem 1.25rem;
+      font-size: 0.8rem; line-height: 1.5;
+    }
+    .decision-rationale strong { color: #93C5FD; }
+
+    /* ── STATE TABLE (other ideas) ── */
+    .ideas-state-table {
+      width: 100%; border-collapse: collapse; font-size: 0.8rem;
+    }
+    .ideas-state-table thead th {
+      background: var(--neutral-100); color: var(--neutral-600);
+      padding: 0.55rem 1rem; font-size: 0.67rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase; text-align: left;
+      border-bottom: 1.5px solid var(--neutral-200);
+    }
+    .ideas-state-table tbody tr { border-bottom: 1px solid var(--neutral-200); }
+    .ideas-state-table tbody tr:last-child { border-bottom: none; background: var(--white); }
+    .ideas-state-table td { padding: 0.65rem 1rem; vertical-align: middle; color: var(--neutral-600); }
+    .ideas-state-table td:first-child { font-weight: 600; color: var(--neutral-800); }
+
+    .state-tag {
+      font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.06em; padding: 0.2rem 0.5rem; border-radius: 4px; white-space: nowrap;
+    }
+    .state-fallback  { background: var(--primary-light); color: var(--primary); }
+    .state-deferred  { background: var(--neutral-100); color: var(--neutral-600); }
+
+    /* ── FLOW ── */
+    .flow-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .flow-step {
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: 0 1rem;
+      position: relative;
+    }
+
+    .flow-step:not(:last-child) .flow-line {
+      position: absolute;
+      left: 19px;
+      top: 40px;
+      bottom: -12px;
+      width: 2px;
+      background: var(--neutral-200);
+    }
+
+    .flow-step-num {
+      display: flex; align-items: flex-start; justify-content: center;
+      padding-top: 0.9rem;
+    }
+
+    .step-circle {
+      width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.78rem; font-weight: 700; flex-shrink: 0;
+    }
+
+    .step-circle.normal   { background: var(--neutral-200); color: var(--neutral-700); }
+    .step-circle.primary  { background: var(--primary); color: var(--white); }
+    .step-circle.selected { background: var(--selected); color: var(--white); }
+    .step-circle.warn     { background: var(--warn); color: var(--white); }
+
+    .flow-step-content {
+      background: var(--white);
+      border: 1.5px solid var(--neutral-200);
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .flow-step-content.highlight {
+      background: var(--selected-light);
+      border-color: var(--selected);
+    }
+
+    .flow-step-content.warn-step {
+      background: var(--warn-light);
+      border-color: var(--warn-border);
+    }
+
+    .flow-step-content .step-label {
+      font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.09em; margin-bottom: 0.35rem;
+    }
+
+    .flow-step-content.highlight .step-label { color: var(--selected); }
+    .flow-step-content:not(.highlight):not(.warn-step) .step-label { color: var(--neutral-500); }
+    .flow-step-content.warn-step .step-label { color: var(--warn); }
+
+    .flow-step-content .step-title {
+      font-size: 0.88rem; font-weight: 700; margin-bottom: 0.3rem;
+    }
+
+    .flow-step-content .step-desc {
+      font-size: 0.78rem; color: var(--neutral-600); line-height: 1.45;
+    }
+
+    .flow-step-content.highlight .step-desc { color: var(--neutral-800); }
+
+    .sub-steps {
+      margin-top: 0.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .sub-step {
+      display: flex; gap: 0.5rem; align-items: flex-start;
+    }
+
+    .sub-step .ss-icon {
+      display: flex; align-items: center; justify-content: center;
+      width: 18px; height: 18px; border-radius: 4px;
+      font-size: 0.6rem; font-weight: 700; flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .ss-icon.idea1 { background: var(--selected-light); color: var(--selected); }
+    .ss-icon.idea2 { background: var(--primary-light); color: var(--primary); }
+    .ss-icon.idea3 { background: var(--rank1-light); color: var(--rank1); }
+
+    .sub-step .ss-text {
+      font-size: 0.77rem; color: var(--neutral-700); line-height: 1.4;
+    }
+
+    .response-mock {
+      margin-top: 0.75rem;
+      background: var(--white);
+      border: 1.5px solid var(--neutral-200);
+      border-radius: 10px;
+      padding: 0.9rem 1rem;
+      font-size: 0.78rem;
+    }
+
+    .mock-badge {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      background: var(--rank1-light); color: var(--rank1);
+      border-radius: 4px; font-size: 0.65rem; font-weight: 700;
+      padding: 0.2rem 0.5rem; margin-bottom: 0.5rem;
+    }
+
+    .mock-verdict {
+      font-size: 0.95rem; font-weight: 700; color: var(--rank1);
+      margin-bottom: 0.35rem;
+    }
+
+    .mock-body {
+      color: var(--neutral-700); line-height: 1.45; margin-bottom: 0.5rem;
+    }
+
+    .mock-next {
+      color: var(--primary); font-weight: 500; font-size: 0.78rem;
+      text-decoration: underline; cursor: pointer;
+    }
+
+    .mock-disclaimer {
+      margin-top: 0.5rem; font-size: 0.65rem; color: var(--neutral-400);
+      font-style: italic; line-height: 1.3;
+    }
+
+    .mock-reg {
+      display: flex; gap: 0.4rem; align-items: flex-start;
+      margin-top: 0.5rem; padding-top: 0.5rem;
+      border-top: 1px solid var(--neutral-200);
+      font-size: 0.65rem; color: var(--neutral-400); line-height: 1.3;
+    }
+
+    /* ── EXPERIMENT TABLE ── */
+    .exp-table {
+      width: 100%; border-collapse: collapse; font-size: 0.82rem;
+    }
+    .exp-table tbody tr { border-bottom: 1px solid var(--neutral-200); background: var(--white); }
+    .exp-table tbody tr:last-child { border-bottom: none; }
+    .exp-table td { padding: 0.75rem 1rem; vertical-align: top; line-height: 1.45; }
+    .exp-table td:first-child {
+      font-size: 0.67rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--neutral-500); white-space: nowrap; width: 18%; background: var(--neutral-50);
+    }
+    .exp-table td:last-child { color: var(--neutral-700); }
+
+    .metric-primary   { font-weight: 600; color: var(--neutral-900); }
+    .metric-secondary { color: var(--neutral-600); font-size: 0.78rem; }
+
+    .success-criteria {
+      display: flex; flex-direction: column; gap: 0.4rem;
+    }
+    .success-row {
+      display: flex; gap: 0.5rem; align-items: flex-start; font-size: 0.79rem;
+    }
+    .success-row .sc-icon {
+      font-size: 0.65rem; font-weight: 700; padding: 0.2rem 0.4rem;
+      border-radius: 4px; flex-shrink: 0; margin-top: 0.05rem;
+    }
+    .sc-ship   { background: var(--rank1-light); color: var(--rank1); }
+    .sc-iter   { background: var(--warn-light); color: var(--warn); }
+    .sc-pivot  { background: var(--error-light); color: var(--error); }
+
+    /* ── PRE-BUILD CALLOUT ── */
+    .prebuild-callout {
+      background: var(--warn-light);
+      border: 1.5px solid var(--warn-border);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+    }
+    .prebuild-callout .pb-title {
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.09em; color: var(--warn); margin-bottom: 0.75rem;
+    }
+    .prebuild-list { display: flex; flex-direction: column; gap: 0.65rem; }
+    .prebuild-item {
+      display: flex; gap: 0.75rem; align-items: flex-start;
+    }
+    .pb-tag {
+      font-size: 0.62rem; font-weight: 700; background: var(--warn);
+      color: var(--white); border-radius: 4px; padding: 0.15rem 0.45rem;
+      white-space: nowrap; flex-shrink: 0; margin-top: 0.1rem;
+    }
+    .pb-text { font-size: 0.8rem; color: var(--neutral-800); line-height: 1.4; }
+    .pb-text strong { color: var(--neutral-900); }
+    .pb-text .pb-risk { color: var(--warn); font-style: italic; font-size: 0.75rem; }
+
+    /* ── FOOTER ── */
+    .page-footer {
+      max-width: 1100px; margin: 3rem auto 0;
+      padding-top: 1.25rem; border-top: 1px solid var(--neutral-200);
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 1rem; flex-wrap: wrap;
+    }
+    .footer-meta { font-size: 0.68rem; color: var(--neutral-400); line-height: 1.5; }
+    .footer-ai   { font-size: 0.68rem; color: var(--neutral-400); text-align: right; }
+
+    @media (max-width: 800px) { .pillars-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) { body { padding: 1.5rem 1rem 3rem; } }
+  </style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="header-left">
+    <div class="kicker">Ideate &amp; Validate · Cycle 01 · 2026</div>
+    <h1>Chosen Solution</h1>
+    <div class="subtitle">Coverage &amp; Inquiries Squad &nbsp;·&nbsp; NexHealth / Coverwise</div>
+  </div>
+  <div class="header-right">
+    Generated: 2026-05-06<br>
+    Last modified: 2026-05-06<br>
+    Status: <strong style="color:var(--warn);">Pre-build validation pending</strong>
+  </div>
+</header>
+
+<main class="content">
+
+  <!-- OPPORTUNITY BANNER -->
+  <div class="opp-banner">
+    <div class="opp-node">C1.1</div>
+    <div class="opp-text">
+      <strong>Target opportunity:</strong> The policyholder receives a Coverwise response but it doesn't generate enough clarity or confidence to act without calling.
+    </div>
+  </div>
+
+  <!-- ── SECTION 1 — DECISION ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">1</div>
+      <div class="section-title">Solution Decision</div>
+    </div>
+
+    <div class="decision-card">
+      <div class="dc-kicker">✦ Triad decision — Coverwise Conversational Response</div>
+      <h2>Combination of Ideas 1 + 2 + 3</h2>
+      <div class="dc-outcome">
+        <strong>Outcome target:</strong> Reduce the % of users who call the call center after receiving a digital response. Move KR3 (NPS post-inquiry) from 28 to ≥ 38 in the first cycle post-build.
+      </div>
+    </div>
+
+    <div class="pillars-grid">
+      <div class="pillar-card">
+        <div class="pillar-num">1</div>
+        <div class="pillar-idea">Idea 1</div>
+        <div class="pillar-title">LLM Conversational Response</div>
+        <div class="pillar-dim">Dimension: <strong>Language clarity</strong>. Eliminates policy jargon. The response adapts to the user's vocabulary.</div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-num">2</div>
+        <div class="pillar-idea">Idea 2</div>
+        <div class="pillar-title">Plan &amp; Certainty Indicator</div>
+        <div class="pillar-dim">Dimension: <strong>Personalization confidence</strong>. Makes it explicit that the answer applies to their specific plan — not a generic one.</div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-num">3</div>
+        <div class="pillar-idea">Idea 3</div>
+        <div class="pillar-title">Next Step Suggestion</div>
+        <div class="pillar-dim">Dimension: <strong>Journey closure</strong>. After the response, a concrete action keeps the user inside the digital channel.</div>
+      </div>
+    </div>
+
+    <div class="decision-rationale">
+      The three ideas attack complementary dimensions of C1.1 and work as a system. <strong>SA-7 (LLM accuracy on coverage)</strong> is the highest-risk assumption — but it's validable with a quick technical evaluation before build, without requiring user research. Idea 4 (intelligent escalation) is reserved as a fallback for low-certainty cases and is included in the design but not the primary experiment.
+    </div>
+
+    <div style="margin-top:1.25rem;">
+      <table class="ideas-state-table">
+        <thead>
+          <tr><th>Idea</th><th>Status</th><th>Rationale</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Idea 4 — Intelligent Escalation</td>
+            <td><span class="state-tag state-fallback">Fallback</span></td>
+            <td>Complementary to the solution. Activates only when LLM certainty falls below the defined threshold. Not the primary experiment.</td>
+          </tr>
+          <tr>
+            <td>Idea 5 — Dual Response (simple + technical)</td>
+            <td><span class="state-tag state-deferred">Deferred</span></td>
+            <td>Valid for advanced users. Add as post-validation iteration if SA-5 reveals a meaningful segment that prefers the technical text.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── SECTION 2 — SOLUTION FLOW ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">2</div>
+      <div class="section-title">Proposed Conversational Flow</div>
+    </div>
+
+    <div class="flow-container">
+
+      <div class="flow-step">
+        <div class="flow-line"></div>
+        <div class="flow-step-num"><div class="step-circle normal">1</div></div>
+        <div class="flow-step-content">
+          <div class="step-label">User input</div>
+          <div class="step-title">Policyholder submits a query in colloquial language</div>
+          <div class="step-desc">e.g., "Do I get coverage for a knee MRI?"</div>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-line"></div>
+        <div class="flow-step-num"><div class="step-circle primary">2</div></div>
+        <div class="flow-step-content">
+          <div class="step-label">Processing — 2 layers</div>
+          <div class="step-title">Coverwise processes the query</div>
+          <div class="sub-steps">
+            <div class="sub-step">
+              <div class="ss-icon idea1">I1</div>
+              <div class="ss-text"><strong>Semantic layer:</strong> maps colloquial vocabulary to the technical procedure (e.g., "knee MRI" → "femoropatellar joint MRI, articular")</div>
+            </div>
+            <div class="sub-step">
+              <div class="ss-icon idea2">I2</div>
+              <div class="ss-text"><strong>LLM layer:</strong> generates the response in plain language, personalized to the policyholder's specific plan and certainty level</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-line"></div>
+        <div class="flow-step-num"><div class="step-circle selected">3</div></div>
+        <div class="flow-step-content highlight">
+          <div class="step-label">Response — the three elements</div>
+          <div class="step-title">What the policyholder sees</div>
+          <div class="sub-steps">
+            <div class="sub-step">
+              <div class="ss-icon idea1">I1</div>
+              <div class="ss-text"><strong>Clear verdict:</strong> "Yes, it's covered" / "Not covered" / "Needs review"</div>
+            </div>
+            <div class="sub-step">
+              <div class="ss-icon idea2">I2</div>
+              <div class="ss-text"><strong>Plan &amp; certainty indicator:</strong> "Applied to your Digital Plus plan · High certainty"</div>
+            </div>
+            <div class="sub-step">
+              <div class="ss-icon idea3">I3</div>
+              <div class="ss-text"><strong>Practical translation + next step:</strong> "This means you pay only the $12,000 copay. Want me to help you schedule?"</div>
+            </div>
+          </div>
+
+          <!-- RESPONSE MOCK -->
+          <div class="response-mock">
+            <div class="mock-badge">✓ Applied to your plan: Digital Plus &nbsp;·&nbsp; High certainty</div>
+            <div class="mock-verdict">✓ Yes, it's covered.</div>
+            <div class="mock-body">Your knee MRI (femoropatellar joint) is covered under your Digital Plus plan. You only need to pay the $12,000 copay — no prior authorization required.</div>
+            <div class="mock-next">→ Find a provider near you</div>
+            <div class="mock-reg">⚠ This information is informational and does not replace NexHealth's formal resolution.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-step-num"><div class="step-circle warn">4</div></div>
+        <div class="flow-step-content warn-step">
+          <div class="step-label">Low-certainty fallback (Idea 4)</div>
+          <div class="step-title">If certainty falls below the threshold</div>
+          <div class="step-desc">Intelligent escalation activates: "I'm not 100% sure for your specific case. Want an advisor to confirm it now? They already have your full query." The advisor picks up with full context — no starting from scratch.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECTION 3 — EXPERIMENT DESIGN ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">3</div>
+      <div class="section-title">Experiment Design</div>
+    </div>
+
+    <table class="exp-table">
+      <tbody>
+        <tr>
+          <td>Type</td>
+          <td>A/B test in production</td>
+        </tr>
+        <tr>
+          <td>Hypothesis</td>
+          <td><em>If policyholders receive a conversational response personalized to their plan + a suggested next step, then post-inquiry NPS will improve ≥ 5 points and the % of users who call within 24h of a digital inquiry will drop ≥ 20%.</em></td>
+        </tr>
+        <tr>
+          <td>Variants</td>
+          <td>
+            <div><strong>Control:</strong> current response (policy text + PDF)</div>
+            <div style="margin-top:0.3rem;"><strong>Variant:</strong> Coverwise Conversational Response (Ideas 1+2+3)</div>
+          </td>
+        </tr>
+        <tr>
+          <td>Primary metrics</td>
+          <td>
+            <div class="metric-primary">1. NPS post-inquiry (in-app survey, 2 questions)</div>
+            <div class="metric-primary" style="margin-top:0.3rem;">2. % of calls to call center within 24h of a digital inquiry</div>
+          </td>
+        </tr>
+        <tr>
+          <td>Secondary metrics</td>
+          <td>
+            <div class="metric-secondary">· Next step CTA adoption rate</div>
+            <div class="metric-secondary">· In-session time after the response</div>
+            <div class="metric-secondary">· % of queries escalated (low certainty)</div>
+          </td>
+        </tr>
+        <tr>
+          <td>Success criteria</td>
+          <td>
+            <div class="success-criteria">
+              <div class="success-row">
+                <span class="sc-icon sc-ship">SHIP</span>
+                <span>NPS +5 points <strong>AND</strong> calls reduced ≥ 20% in the first 14 days → ship to 100%</span>
+              </div>
+              <div class="success-row">
+                <span class="sc-icon sc-iter">ITERATE</span>
+                <span>NPS improves but calls don't decrease → redesign the next-step flow before shipping</span>
+              </div>
+              <div class="success-row">
+                <span class="sc-icon sc-pivot">PIVOT</span>
+                <span>Neither metric improves → revisit SA-5 hypothesis (does the user actually prefer plain language?)</span>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>Sample / Duration</td>
+          <td>N to be calculated with Paula Castillo (Data Analyst). Estimate: 3–4 weeks for statistical significance given current Coverwise traffic.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── SECTION 4 — PRE-BUILD ASSUMPTIONS ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">4</div>
+      <div class="section-title">Pre-Build Assumptions — Validate Before Investing in Development</div>
+    </div>
+
+    <div class="prebuild-callout">
+      <div class="pb-title">⚠ These 3 assumptions must be validated before the build begins</div>
+      <div class="prebuild-list">
+        <div class="prebuild-item">
+          <span class="pb-tag">SA-5</span>
+          <div class="pb-text">
+            <strong>Policyholders prefer plain language over policy text as their source of confidence.</strong><br>
+            <span class="pb-risk">Risk if false: if the user prefers the technical text as the "official source," the solution may not generate trust and could worsen perception.</span>
+          </div>
+        </div>
+        <div class="prebuild-item">
+          <span class="pb-tag">SA-6</span>
+          <div class="pb-text">
+            <strong>Policyholders understand and act on the suggested next step after the response.</strong><br>
+            <span class="pb-risk">Risk if false: if the CTA is ignored, the post-response flow needs to be redesigned before the build.</span>
+          </div>
+        </div>
+        <div class="prebuild-item">
+          <span class="pb-tag">SA-7</span>
+          <div class="pb-text">
+            <strong>The LLM can generate coverage responses that are sufficiently accurate, without hallucinating conditions of the plan.</strong><br>
+            <span class="pb-risk">Risk if false: LLM coverage errors carry legal implications (Chile/Colombia regulation: the response is informational but cannot induce error).</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="page-footer">
+  <div class="footer-meta">
+    Source: <code>ideate-validate/solucion-elegida.md</code> &nbsp;·&nbsp; v1.0 &nbsp;·&nbsp; I&amp;V Cycle 01, 2026<br>
+    Author: Claude (I&amp;V facilitator) &nbsp;·&nbsp; Last modified: 2026-05-06
+  </div>
+  <div class="footer-ai">Generated with assistance from Claude</div>
+</footer>
+
+</body>
+</html>

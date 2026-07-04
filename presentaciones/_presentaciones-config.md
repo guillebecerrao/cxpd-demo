@@ -28,7 +28,11 @@ Si el registro está vacío, no se agrega footer.
 
 | Nombre display | Archivo HTML | Descripción breve | Idioma base | Estado idiomas |
 |---|---|---|---|---|
-| _Sin documentos registrados aún_ | | | | |
+| OST — Opportunity Solution Tree | `ost.html` | Full opportunity tree with selected path highlighted. Shape reference document. | en | `single_language` |
+| Sizing & Prioritization — Shape Cycle 01 | `sizing-priorizacion_shape-c01-2026.html` | Scoring criteria, node ranking, tie-break analysis, and selected opportunity for Cycle 01. | en | `single_language` |
+| Ideas Register — I&V Cycle 01 | `ideas_ideate-validate-c01-2026.html` | All ideas generated for C1.1: 5 active (3 selected, 2 deferred) + 3 discarded in session. | en | `single_language` |
+| Chosen Solution — I&V Cycle 01 | `solucion-elegida_ideate-validate-c01-2026.html` | Full solution design: Ideas 1+2+3, conversational flow, A/B experiment, and pre-build assumptions. | en | `single_language` |
+| Solution Assumptions — I&V Cycle 01 | `supuestos-solucion_ideate-validate-c01-2026.html` | 10 assumptions in 3 tiers: Resolved (4), Pre-build (3), Post-build (3). Types D/U/V. | en | `single_language` |
 
 **Estados de idiomas posibles:**
 

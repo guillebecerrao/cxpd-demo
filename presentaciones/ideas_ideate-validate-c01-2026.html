@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ideas Register — C1.1 — I&V Cycle 01</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary:        #1D4ED8;
+      --primary-light:  #DBEAFE;
+      --primary-border: #93C5FD;
+      --selected:       #7C3AED;
+      --selected-light: #EDE9FE;
+      --selected-dark:  #6D28D9;
+      --deferred:       #0891B2;
+      --deferred-light: #CFFAFE;
+      --deferred-border:#67E8F9;
+      --discarded:      #64748B;
+      --discarded-light:#F1F5F9;
+      --neutral-900:    #0F172A;
+      --neutral-800:    #1E293B;
+      --neutral-700:    #334155;
+      --neutral-600:    #475569;
+      --neutral-500:    #64748B;
+      --neutral-400:    #94A3B8;
+      --neutral-300:    #CBD5E1;
+      --neutral-200:    #E2E8F0;
+      --neutral-100:    #F1F5F9;
+      --neutral-50:     #F8FAFC;
+      --white:          #FFFFFF;
+      --rank1:          #059669;
+      --rank1-light:    #D1FAE5;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--neutral-50);
+      color: var(--neutral-900);
+      min-height: 100vh;
+      padding: 2.5rem 2rem 4rem;
+    }
+
+    /* ── HEADER ── */
+    .page-header {
+      max-width: 1100px;
+      margin: 0 auto 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding-bottom: 1.25rem;
+      border-bottom: 2px solid var(--neutral-200);
+      gap: 1rem;
+    }
+    .header-left .kicker {
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--primary); margin-bottom: 0.35rem;
+    }
+    .header-left h1 {
+      font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2;
+    }
+    .header-left .subtitle {
+      font-size: 0.85rem; color: var(--neutral-500); margin-top: 0.3rem;
+    }
+    .header-right {
+      text-align: right; font-size: 0.72rem; color: var(--neutral-400);
+      line-height: 1.6; flex-shrink: 0;
+    }
+
+    /* ── CONTENT ── */
+    .content { max-width: 1100px; margin: 0 auto; }
+
+    /* ── OPPORTUNITY BANNER ── */
+    .opp-banner {
+      background: var(--neutral-900);
+      color: var(--white);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .opp-banner .opp-node {
+      background: var(--selected);
+      color: var(--white);
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .opp-banner .opp-text {
+      font-size: 0.88rem;
+      line-height: 1.4;
+      color: rgba(255,255,255,0.9);
+    }
+    .opp-banner .opp-text strong { color: var(--white); }
+
+    /* ── SECTION HEADER ── */
+    .section { margin-bottom: 2.5rem; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .section-number {
+      display: flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--primary); color: var(--white);
+      font-size: 0.75rem; font-weight: 700; flex-shrink: 0;
+    }
+    .section-title { font-size: 1.05rem; font-weight: 700; }
+
+    /* ── LEGEND ── */
+    .legend {
+      display: flex; gap: 1.25rem; flex-wrap: wrap;
+      align-items: center; margin-bottom: 1.5rem;
+    }
+    .legend-label {
+      font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--neutral-500);
+    }
+    .legend-item {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-size: 0.75rem; color: var(--neutral-700);
+    }
+    .legend-swatch {
+      width: 12px; height: 12px; border-radius: 3px; border: 1.5px solid; flex-shrink: 0;
+    }
+
+    /* ── IDEAS GRID ── */
+    .ideas-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .idea-card {
+      border-radius: 12px;
+      padding: 1.25rem;
+      border: 1.5px solid;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      position: relative;
+    }
+
+    .idea-card.selected {
+      background: var(--selected-light);
+      border-color: var(--selected);
+    }
+    .idea-card.deferred {
+      background: var(--deferred-light);
+      border-color: var(--deferred-border);
+    }
+
+    .idea-card .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .idea-num {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.05em;
+    }
+    .idea-card.selected .idea-num  { color: var(--selected); }
+    .idea-card.deferred .idea-num  { color: var(--deferred); }
+
+    .idea-status-tag {
+      font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.07em; padding: 0.2rem 0.5rem; border-radius: 4px;
+      flex-shrink: 0;
+    }
+    .tag-selected  { background: var(--selected); color: var(--white); }
+    .tag-deferred  { background: var(--deferred); color: var(--white); }
+
+    .idea-card .idea-title {
+      font-size: 0.9rem; font-weight: 700; line-height: 1.3;
+    }
+    .idea-card.selected .idea-title { color: var(--selected-dark); }
+    .idea-card.deferred .idea-title { color: var(--neutral-800); }
+
+    .idea-card .idea-desc {
+      font-size: 0.78rem; line-height: 1.5; color: var(--neutral-700);
+    }
+    .idea-card.selected .idea-desc { color: var(--neutral-800); }
+
+    .attacks-label {
+      font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--neutral-500); margin-bottom: 0.2rem;
+    }
+    .attacks-text {
+      font-size: 0.75rem; color: var(--neutral-700); line-height: 1.4;
+    }
+    .idea-card.selected .attacks-text { color: var(--neutral-800); }
+
+    .example-box {
+      background: rgba(255,255,255,0.65);
+      border-radius: 8px;
+      padding: 0.6rem 0.75rem;
+      border-left: 3px solid;
+      font-size: 0.74rem;
+      line-height: 1.45;
+      color: var(--neutral-800);
+      font-style: italic;
+    }
+    .idea-card.selected .example-box { border-color: var(--selected); }
+    .idea-card.deferred .example-box { border-color: var(--deferred); }
+
+    .deferred-reason {
+      font-size: 0.73rem; color: var(--neutral-600); line-height: 1.4;
+      background: rgba(255,255,255,0.5); border-radius: 6px; padding: 0.5rem 0.65rem;
+    }
+
+    /* ── COMBINED SYSTEM NOTE ── */
+    .system-note {
+      background: var(--neutral-900);
+      border-radius: 10px;
+      padding: 1.1rem 1.4rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+    .system-note .sn-icon {
+      font-size: 1.1rem; flex-shrink: 0; padding-top: 0.1rem;
+    }
+    .system-note .sn-text {
+      font-size: 0.8rem; color: rgba(255,255,255,0.9); line-height: 1.5;
+    }
+    .system-note .sn-text strong { color: var(--white); }
+
+    /* ── DISCARDED TABLE ── */
+    .discarded-section {
+      margin-top: 2.5rem;
+    }
+    .discarded-header {
+      display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.85rem;
+    }
+    .discarded-header .disc-icon {
+      font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--neutral-500);
+      background: var(--neutral-100); border-radius: 6px;
+      padding: 0.25rem 0.6rem;
+    }
+    .discarded-table {
+      width: 100%; border-collapse: collapse; font-size: 0.8rem;
+    }
+    .discarded-table thead th {
+      background: var(--neutral-100); color: var(--neutral-600);
+      padding: 0.55rem 1rem; font-size: 0.67rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase; text-align: left;
+      border-bottom: 1.5px solid var(--neutral-200);
+    }
+    .discarded-table tbody tr { border-bottom: 1px solid var(--neutral-200); }
+    .discarded-table tbody tr:last-child { border-bottom: none; }
+    .discarded-table td {
+      padding: 0.65rem 1rem; color: var(--neutral-500); vertical-align: middle;
+    }
+    .discarded-table td:first-child { font-weight: 600; color: var(--neutral-700); }
+
+    /* ── FOOTER ── */
+    .page-footer {
+      max-width: 1100px; margin: 3rem auto 0;
+      padding-top: 1.25rem; border-top: 1px solid var(--neutral-200);
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 1rem; flex-wrap: wrap;
+    }
+    .footer-meta { font-size: 0.68rem; color: var(--neutral-400); line-height: 1.5; }
+    .footer-ai   { font-size: 0.68rem; color: var(--neutral-400); text-align: right; }
+
+    @media (max-width: 900px) { .ideas-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 600px) { .ideas-grid { grid-template-columns: 1fr; } body { padding: 1.5rem 1rem 3rem; } }
+  </style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="header-left">
+    <div class="kicker">Ideate &amp; Validate · Cycle 01 · 2026</div>
+    <h1>Ideas Register</h1>
+    <div class="subtitle">Coverage &amp; Inquiries Squad &nbsp;·&nbsp; NexHealth / Coverwise</div>
+  </div>
+  <div class="header-right">
+    Generated: 2026-05-06<br>
+    Last modified: 2026-05-06<br>
+    Author: Claude (I&amp;V facilitator)
+  </div>
+</header>
+
+<main class="content">
+
+  <!-- OPPORTUNITY BANNER -->
+  <div class="opp-banner">
+    <div class="opp-node">C1.1</div>
+    <div class="opp-text">
+      <strong>Target opportunity:</strong> The policyholder receives a Coverwise response but it doesn't generate enough clarity or confidence to act without calling.
+    </div>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <span class="legend-label">Legend</span>
+    <div class="legend-item">
+      <div class="legend-swatch" style="background:var(--selected-light); border-color:var(--selected);"></div>
+      Selected — part of the chosen solution
+    </div>
+    <div class="legend-item">
+      <div class="legend-swatch" style="background:var(--deferred-light); border-color:var(--deferred-border);"></div>
+      Deferred — valid, not the Cycle 01 focus
+    </div>
+  </div>
+
+  <!-- IDEAS GRID -->
+  <div class="ideas-grid">
+
+    <!-- IDEA 1 — SELECTED -->
+    <div class="idea-card selected">
+      <div class="card-top">
+        <div class="idea-num">1</div>
+        <span class="idea-status-tag tag-selected">✦ Selected</span>
+      </div>
+      <div class="idea-title">LLM-Generated Conversational Response</div>
+      <div class="idea-desc">Instead of returning the literal policy text, Coverwise uses an LLM to generate a plain-language response — specific to the policyholder's plan — with a clear coverage verdict.</div>
+      <div>
+        <div class="attacks-label">How it attacks C1.1</div>
+        <div class="attacks-text">Removes policy jargon as a barrier. The response adapts to the user's vocabulary, not the contract's.</div>
+      </div>
+      <div class="example-box">
+        Instead of "Article 5.3.2 of your plan grants partial coverage for class-B outpatient procedures," the user sees: "Yes, your traumatology consultation is covered. You only pay the $12,000 copay."
+      </div>
+    </div>
+
+    <!-- IDEA 2 — SELECTED -->
+    <div class="idea-card selected">
+      <div class="card-top">
+        <div class="idea-num">2</div>
+        <span class="idea-status-tag tag-selected">✦ Selected</span>
+      </div>
+      <div class="idea-title">Plan &amp; Certainty Indicator</div>
+      <div class="idea-desc">Each response includes two additional elements: (a) a certainty level ("High confidence — based on your Digital Plus plan") and (b) a clear signal that the answer applies to their specific contract, not a generic one.</div>
+      <div>
+        <div class="attacks-label">How it attacks C1.1</div>
+        <div class="attacks-text">Directly answers "does this apply to MY plan?" — the core trust gap. The policyholder knows the response is theirs, not someone else's.</div>
+      </div>
+      <div class="example-box">
+        A green badge at the top of the response: "✓ Applied to your plan: Digital Plus | Certainty: High"
+      </div>
+    </div>
+
+    <!-- IDEA 3 — SELECTED -->
+    <div class="idea-card selected">
+      <div class="card-top">
+        <div class="idea-num">3</div>
+        <span class="idea-status-tag tag-selected">✦ Selected</span>
+      </div>
+      <div class="idea-title">Practical Translation + Next Step</div>
+      <div class="idea-desc">After the response, the system adds a plain-language summary and a concrete suggested action. Format: answer → what this means → what you can do now.</div>
+      <div>
+        <div class="attacks-label">How it attacks C1.1</div>
+        <div class="attacks-text">The trust gap isn't just understanding the answer — it's knowing what to do with it. The next step closes the journey loop inside the digital channel.</div>
+      </div>
+      <div class="example-box">
+        "Yes, it's covered. This means you can go to any provider in our network with no prior authorization. Want me to help you find one near you?"
+      </div>
+    </div>
+
+    <!-- IDEA 4 — DEFERRED -->
+    <div class="idea-card deferred">
+      <div class="card-top">
+        <div class="idea-num">4</div>
+        <span class="idea-status-tag tag-deferred">Deferred</span>
+      </div>
+      <div class="idea-title">Intelligent Escalation with Preserved Context</div>
+      <div class="idea-desc">When certainty is low, Coverwise doesn't fail silently. It offers to connect with an advisor and passes the full context: procedure name, plan, and the tentative answer. The advisor picks up without starting from scratch.</div>
+      <div>
+        <div class="attacks-label">How it attacks C1.1</div>
+        <div class="attacks-text">Transforms "I don't trust this" into "there's a human who can confirm this quickly." Converts a frustrated call into a short, contextual one.</div>
+      </div>
+      <div class="deferred-reason">
+        Included in the solution design as a low-certainty fallback — not the primary experiment. Will activate only when the LLM confidence score falls below the defined threshold.
+      </div>
+    </div>
+
+    <!-- IDEA 5 — DEFERRED -->
+    <div class="idea-card deferred">
+      <div class="card-top">
+        <div class="idea-num">5</div>
+        <span class="idea-status-tag tag-deferred">Deferred</span>
+      </div>
+      <div class="idea-title">Dual Response: Simple Summary + Technical Detail on Demand</div>
+      <div class="idea-desc">The primary response is short and plain-language. A secondary CTA "View your policy details" expands to show the exact contract text — for users who need the formal source (e.g., to present at a clinic or for supplemental insurance).</div>
+      <div>
+        <div class="attacks-label">How it attacks C1.1</div>
+        <div class="attacks-text">Serves two profiles: the user who trusts the plain summary, and the user who needs the technical text to validate. Doesn't force the first profile to read what confuses the second.</div>
+      </div>
+      <div class="deferred-reason">
+        Valid for a power-user segment. Added as a post-validation iteration if SA-5 reveals a meaningful segment that prefers the technical text.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- COMBINED SYSTEM NOTE -->
+  <div class="system-note">
+    <div class="sn-icon">⚡</div>
+    <div class="sn-text">
+      <strong>Ideas 1, 2, and 3 work as a system, not as independent features.</strong> Idea 1 provides language clarity. Idea 2 provides personalization confidence. Idea 3 closes the journey with a concrete action. Removing any one of the three leaves the trust gap partially open. The chosen solution is their combination.
+    </div>
+  </div>
+
+  <!-- DISCARDED -->
+  <div class="discarded-section">
+    <div class="discarded-header">
+      <span class="disc-icon">✕ Discarded in session</span>
+    </div>
+    <table class="discarded-table">
+      <thead>
+        <tr>
+          <th>Idea</th>
+          <th>Reason for discarding</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Chatbot with visual avatar</td>
+          <td>Doesn't address the trust gap in the information — it's cosmetic. The problem is what is said, not how it looks.</td>
+        </tr>
+        <tr>
+          <td>Post-response satisfaction survey</td>
+          <td>Useful for metrics but doesn't solve the opportunity for the current user — it only measures after the fact.</td>
+        </tr>
+        <tr>
+          <td>FAQ of frequent coverage types</td>
+          <td>Static, non-conversational, non-personalized — reverts to the current problem of keyword matching and PDF forms.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+
+<footer class="page-footer">
+  <div class="footer-meta">
+    Source: <code>ideate-validate/ideas.md</code> &nbsp;·&nbsp; v1.0 &nbsp;·&nbsp; I&amp;V Cycle 01, 2026<br>
+    Author: Claude (I&amp;V facilitator) &nbsp;·&nbsp; Last modified: 2026-05-06 &nbsp;·&nbsp; Methodology: Torres, <em>Continuous Discovery Habits</em>, Ch. 10
+  </div>
+  <div class="footer-ai">Generated with assistance from Claude</div>
+</footer>
+
+</body>
+</html>

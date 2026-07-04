@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opportunity Solution Tree — Coverage & Inquiries Squad</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary:        #1D4ED8;
+      --primary-dark:   #1E40AF;
+      --primary-light:  #DBEAFE;
+      --selected:       #7C3AED;
+      --selected-light: #EDE9FE;
+      --selected-dark:  #6D28D9;
+      --path:           #2563EB;
+      --path-light:     #EFF6FF;
+      --path-border:    #93C5FD;
+      --neutral-950:    #0C0A09;
+      --neutral-900:    #0F172A;
+      --neutral-800:    #1E293B;
+      --neutral-700:    #334155;
+      --neutral-600:    #475569;
+      --neutral-500:    #64748B;
+      --neutral-400:    #94A3B8;
+      --neutral-300:    #CBD5E1;
+      --neutral-200:    #E2E8F0;
+      --neutral-100:    #F1F5F9;
+      --neutral-50:     #F8FAFC;
+      --white:          #FFFFFF;
+      --connector:      #CBD5E1;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--neutral-50);
+      color: var(--neutral-900);
+      min-height: 100vh;
+      padding: 2.5rem 2rem 4rem;
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      max-width: 1320px;
+      margin: 0 auto 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding-bottom: 1.25rem;
+      border-bottom: 2px solid var(--neutral-200);
+      gap: 1rem;
+    }
+
+    .header-left .kicker {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 0.35rem;
+    }
+
+    .header-left h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--neutral-900);
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .header-left .subtitle {
+      font-size: 0.85rem;
+      color: var(--neutral-500);
+      margin-top: 0.3rem;
+    }
+
+    .header-right {
+      text-align: right;
+      font-size: 0.72rem;
+      color: var(--neutral-400);
+      line-height: 1.6;
+      flex-shrink: 0;
+    }
+
+    /* ── LEGEND ── */
+    .legend {
+      max-width: 1320px;
+      margin: 0 auto 2.5rem;
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .legend-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--neutral-500);
+      margin-right: 0.5rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--neutral-700);
+    }
+
+    .legend-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      border: 1.5px solid;
+      flex-shrink: 0;
+    }
+
+    /* ── TREE CONTAINER ── */
+    .ost-tree {
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+
+    /* ── OUTCOME NODE ── */
+    .outcome-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 0;
+    }
+
+    .outcome-node {
+      background: var(--neutral-900);
+      color: var(--white);
+      border-radius: 14px;
+      padding: 1.5rem 2rem;
+      width: 680px;
+      max-width: 100%;
+      position: relative;
+    }
+
+    .outcome-node .kicker {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--path-border);
+      margin-bottom: 0.5rem;
+    }
+
+    .outcome-node h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1.45;
+      margin-bottom: 1.1rem;
+    }
+
+    .outcome-metrics {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 1.5rem;
+      padding-top: 0.9rem;
+      border-top: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .metric-item .metric-label {
+      font-size: 0.6rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 0.25rem;
+    }
+
+    .metric-item .metric-value {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .metric-item .metric-sub {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.55);
+      margin-top: 0.1rem;
+    }
+
+    /* ── VERTICAL CONNECTOR (outcome → h-bar) ── */
+    .v-stem {
+      width: 2px;
+      height: 2rem;
+      background: var(--connector);
+      margin: 0 auto;
+    }
+
+    /* ── HORIZONTAL BAR ── */
+    .h-bar-wrapper {
+      position: relative;
+      height: 2px;
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+
+    .h-bar {
+      position: absolute;
+      top: 0;
+      left: calc(12.5%);
+      right: calc(12.5%);
+      height: 2px;
+      background: var(--connector);
+    }
+
+    /* ── BRANCHES ── */
+    .branches-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      max-width: 1320px;
+      margin: 0 auto;
+      padding-top: 2rem;
+      position: relative;
+    }
+
+    /* drop line from h-bar down to each branch-col */
+    .branch-col {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      position: relative;
+    }
+
+    .branch-col::before {
+      content: '';
+      position: absolute;
+      top: -2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 2rem;
+      background: var(--connector);
+    }
+
+    /* ── BRANCH CARD ── */
+    .branch-card {
+      border-radius: 10px;
+      padding: 0.9rem 1rem;
+      border: 1.5px solid;
+      transition: box-shadow 0.15s;
+    }
+
+    .branch-card.muted {
+      background: var(--white);
+      border-color: var(--neutral-200);
+    }
+
+    .branch-card.on-path {
+      background: var(--path-light);
+      border-color: var(--path-border);
+    }
+
+    .branch-card .card-id {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+    }
+
+    .branch-card.muted .card-id   { color: var(--neutral-400); }
+    .branch-card.on-path .card-id { color: var(--path); }
+
+    .branch-card .card-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .branch-card.muted .card-title   { color: var(--neutral-600); }
+    .branch-card.on-path .card-title { color: var(--neutral-900); }
+
+    .branch-card .card-desc {
+      font-size: 0.72rem;
+      color: var(--neutral-500);
+      line-height: 1.4;
+      margin-top: 0.3rem;
+    }
+
+    .branch-card.on-path .card-desc { color: var(--neutral-700); }
+
+    /* ── GROUP CARD ── */
+    .group-card {
+      border-radius: 8px;
+      padding: 0.7rem 0.85rem;
+      border: 1.5px solid;
+    }
+
+    .group-card.muted {
+      background: var(--neutral-100);
+      border-color: var(--neutral-200);
+    }
+
+    .group-card.on-path {
+      background: var(--path-light);
+      border-color: var(--path-border);
+    }
+
+    .group-card .card-id {
+      font-size: 0.57rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.15rem;
+    }
+
+    .group-card.muted .card-id   { color: var(--neutral-400); }
+    .group-card.on-path .card-id { color: var(--path); }
+
+    .group-card .card-title {
+      font-size: 0.75rem;
+      font-weight: 500;
+      line-height: 1.35;
+    }
+
+    .group-card.muted .card-title   { color: var(--neutral-500); }
+    .group-card.on-path .card-title { color: var(--neutral-800); }
+
+    /* ── LEAF NODES ── */
+    .leaf-nodes {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .leaf-node {
+      border-radius: 8px;
+      padding: 0.65rem 0.8rem;
+      border: 1.5px solid;
+    }
+
+    .leaf-node.muted {
+      background: var(--white);
+      border-color: var(--neutral-200);
+    }
+
+    .leaf-node.on-path {
+      background: var(--path-light);
+      border-color: var(--path-border);
+    }
+
+    .leaf-node.selected {
+      background: var(--selected-light);
+      border-color: var(--selected);
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+    }
+
+    .leaf-node .node-id {
+      font-size: 0.57rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.15rem;
+    }
+
+    .leaf-node.muted .node-id    { color: var(--neutral-400); }
+    .leaf-node.on-path .node-id  { color: var(--path); }
+    .leaf-node.selected .node-id { color: var(--selected); }
+
+    .leaf-node .node-text {
+      font-size: 0.73rem;
+      line-height: 1.38;
+    }
+
+    .leaf-node.muted .node-text    { color: var(--neutral-500); }
+    .leaf-node.on-path .node-text  { color: var(--neutral-700); }
+    .leaf-node.selected .node-text { color: var(--neutral-900); font-weight: 500; }
+
+    .selected-badge {
+      display: inline-block;
+      margin-top: 0.4rem;
+      background: var(--selected);
+      color: var(--white);
+      border-radius: 4px;
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 0.15rem 0.45rem;
+    }
+
+    /* ── ASSUMPTIONS CALLOUT ── */
+    .assumptions-section {
+      max-width: 1320px;
+      margin: 3rem auto 0;
+      background: #FFFBEB;
+      border: 1.5px solid #FCD34D;
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .assumptions-section .callout-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: #92400E;
+      margin-bottom: 0.5rem;
+    }
+
+    .assumptions-section p {
+      font-size: 0.8rem;
+      color: #78350F;
+      line-height: 1.5;
+    }
+
+    /* ── FOOTER ── */
+    .page-footer {
+      max-width: 1320px;
+      margin: 3rem auto 0;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--neutral-200);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-meta {
+      font-size: 0.68rem;
+      color: var(--neutral-400);
+      line-height: 1.5;
+    }
+
+    .footer-ai {
+      font-size: 0.68rem;
+      color: var(--neutral-400);
+      text-align: right;
+    }
+
+    @media (max-width: 900px) {
+      .branches-row { grid-template-columns: repeat(2, 1fr); }
+      .h-bar { left: 25%; right: 25%; }
+    }
+
+    @media (max-width: 600px) {
+      .branches-row { grid-template-columns: 1fr; }
+      .h-bar { display: none; }
+      .branch-col::before { display: none; }
+      body { padding: 1.5rem 1rem 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- PAGE HEADER -->
+<header class="page-header">
+  <div class="header-left">
+    <div class="kicker">Shape · Cycle 01 · 2026</div>
+    <h1>Opportunity Solution Tree</h1>
+    <div class="subtitle">Coverage &amp; Inquiries Squad &nbsp;·&nbsp; NexHealth / Coverwise</div>
+  </div>
+  <div class="header-right">
+    Generated: 2026-05-06<br>
+    Last modified: 2026-05-06<br>
+    Author: Claude (Shape facilitator)
+  </div>
+</header>
+
+<!-- LEGEND -->
+<div class="legend">
+  <span class="legend-label">Legend</span>
+  <div class="legend-item">
+    <div class="legend-swatch" style="background:var(--white); border-color:var(--neutral-300);"></div>
+    Explored opportunity
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch" style="background:var(--path-light); border-color:var(--path-border);"></div>
+    On selected path
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch" style="background:var(--selected-light); border-color:var(--selected);"></div>
+    <strong>Selected — Cycle 01 focus</strong>
+  </div>
+</div>
+
+<!-- TREE -->
+<div class="ost-tree">
+
+  <!-- OUTCOME -->
+  <div class="outcome-wrapper">
+    <div class="outcome-node">
+      <div class="kicker">Business Outcome</div>
+      <h2>Policyholders resolve their coverage questions without human intervention, reducing call center load and improving the digital experience.</h2>
+      <div class="outcome-metrics">
+        <div class="metric-item">
+          <div class="metric-label">North Star Metric</div>
+          <div class="metric-value">% of inquiries resolved via digital self-service</div>
+        </div>
+        <div class="metric-item" style="text-align:center;">
+          <div class="metric-label">Baseline</div>
+          <div class="metric-value" style="font-size:1.4rem;">12%</div>
+        </div>
+        <div class="metric-item" style="text-align:center;">
+          <div class="metric-label">Target · Sep 2026</div>
+          <div class="metric-value" style="font-size:1.4rem; color:#93C5FD;">45%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stem down from outcome -->
+  <div class="v-stem"></div>
+
+  <!-- Horizontal bar connecting the 4 branches -->
+  <div class="h-bar-wrapper">
+    <div class="h-bar"></div>
+  </div>
+
+  <!-- BRANCHES -->
+  <div class="branches-row">
+
+    <!-- ── BRANCH A ── -->
+    <div class="branch-col">
+      <div class="branch-card muted">
+        <div class="card-id">Branch A</div>
+        <div class="card-title">Finding the right channel</div>
+        <div class="card-desc">The policyholder doesn't reach Coverwise because they can't find it or prefer calling.</div>
+      </div>
+      <div class="group-card muted">
+        <div class="card-id">A1</div>
+        <div class="card-title">Coverwise access and visibility</div>
+      </div>
+      <div class="leaf-nodes">
+        <div class="leaf-node muted">
+          <div class="node-id">A1.1</div>
+          <div class="node-text">Can't find where to submit a query inside the app</div>
+        </div>
+        <div class="leaf-node muted">
+          <div class="node-id">A1.2</div>
+          <div class="node-text">Doesn't know they can use natural language to ask questions</div>
+        </div>
+        <div class="leaf-node muted">
+          <div class="node-id">A1.3</div>
+          <div class="node-text">Calls the call center directly without attempting the digital channel</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── BRANCH B ── -->
+    <div class="branch-col">
+      <div class="branch-card muted">
+        <div class="card-id">Branch B</div>
+        <div class="card-title">Formulating the query</div>
+        <div class="card-desc">The policyholder reaches Coverwise but can't express their need in a way the system understands.</div>
+      </div>
+      <div class="group-card muted">
+        <div class="card-id">B1</div>
+        <div class="card-title">Expressing needs in their own language</div>
+      </div>
+      <div class="leaf-nodes">
+        <div class="leaf-node muted">
+          <div class="node-id">B1.1</div>
+          <div class="node-text">Uses the colloquial name for a procedure that the system doesn't recognize</div>
+        </div>
+        <div class="leaf-node muted">
+          <div class="node-id">B1.2</div>
+          <div class="node-text">Doesn't know the name of the procedure and doesn't know how to describe it</div>
+        </div>
+        <div class="leaf-node muted">
+          <div class="node-id">B1.3</div>
+          <div class="node-text">Asks a compound query ("does it cover the consultation and the test?") but only gets a partial answer</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── BRANCH C — ON SELECTED PATH ── -->
+    <div class="branch-col">
+      <div class="branch-card on-path">
+        <div class="card-id">Branch C</div>
+        <div class="card-title">Getting a reliable answer</div>
+        <div class="card-desc">The policyholder submits the query but the response doesn't generate enough clarity or confidence to act without calling.</div>
+      </div>
+      <div class="group-card on-path">
+        <div class="card-id">C1</div>
+        <div class="card-title">Clarity and trust in the response</div>
+      </div>
+      <div class="leaf-nodes">
+        <div class="leaf-node selected">
+          <div class="node-id">C1.1</div>
+          <div class="node-text">The response is ambiguous or contains technical language the policyholder doesn't understand — they end up calling anyway</div>
+          <div><span class="selected-badge">✦ Selected — Cycle 01</span></div>
+        </div>
+        <div class="leaf-node on-path">
+          <div class="node-id">C1.2</div>
+          <div class="node-text">Doesn't know if the response applies to their specific plan or is a generic answer</div>
+        </div>
+        <div class="leaf-node on-path">
+          <div class="node-id">C1.3</div>
+          <div class="node-text">Receives a response but doesn't trust it — "the system gets it wrong sometimes"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── BRANCH D ── -->
+    <div class="branch-col">
+      <div class="branch-card muted">
+        <div class="card-id">Branch D</div>
+        <div class="card-title">Acting after the response</div>
+        <div class="card-desc">The policyholder gets an answer but doesn't know what to do next — the journey doesn't end with the response.</div>
+      </div>
+      <div class="group-card muted">
+        <div class="card-id">D1</div>
+        <div class="card-title">Post-response journey continuity</div>
+      </div>
+      <div class="leaf-nodes">
+        <div class="leaf-node muted">
+          <div class="node-id">D1.1</div>
+          <div class="node-text">Knows they're covered but doesn't know how to schedule an appointment or where to go</div>
+        </div>
+        <div class="leaf-node muted">
+          <div class="node-id">D1.2</div>
+          <div class="node-text">Needs to show coverage at the clinic but can't save or share the response</div>
+        </div>
+        <div class="leaf-node muted">
+          <div class="node-id">D1.3</div>
+          <div class="node-text">Knows they're NOT covered but doesn't know what options they have (subsidies, public health, etc.)</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /branches-row -->
+
+</div><!-- /ost-tree -->
+
+<!-- ASSUMPTIONS CALLOUT -->
+<div class="assumptions-section">
+  <div class="callout-title">⚠ Cycle 01 — Context note</div>
+  <p>This OST was built from seeded corporate context without user interviews. All branches reflect team knowledge, not validated user voice. Assumptions are tracked in <code>shape/opportunity-assumptions.md</code>. Branches B and D carry higher uncertainty — scheduled for interview validation in upcoming cycles.</p>
+</div>
+
+<!-- FOOTER -->
+<footer class="page-footer">
+  <div class="footer-meta">
+    Source: <code>contexto/estrategia/ost.md</code> &nbsp;·&nbsp; v1.1 &nbsp;·&nbsp; Shape Cycle 01, 2026<br>
+    Author: Claude (Shape facilitator) &nbsp;·&nbsp; Last modified: 2026-05-06
+  </div>
+  <div class="footer-ai">Generated with assistance from Claude</div>
+</footer>
+
+</body>
+</html>
